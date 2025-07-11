@@ -1,3 +1,6 @@
+auto_discover: false
+layout:
+  strategy: masonry
 rooms:
   - name: Living Room
     cards:
@@ -7,6 +10,7 @@ rooms:
       - type: light
         entity: light.ceiling
   - name: Bedroom
+    layout: horizontal
     cards:
       - type: light
         entity: light.bedside

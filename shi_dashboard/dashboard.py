@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 import argparse
+import os
 import yaml
+import requests
 from jinja2 import Template
 
 
@@ -32,17 +34,45 @@ def load_config(path: Path) -> Dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
+def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
+    """Return a list of rooms generated from available Home Assistant devices."""
+    headers = {"Authorization": f"Bearer {token}"}
+    resp = requests.get(f"{hass_url.rstrip('/')}/api/states", headers=headers, timeout=10)
+    resp.raise_for_status()
+    states = resp.json()
+
+    cards = []
+    for state in states:
+        entity_id = state.get("entity_id")
+        if not entity_id:
+            continue
+        domain = entity_id.split(".")[0]
+        card_type = {
+            "light": "light",
+            "switch": "switch",
+            "climate": "thermostat",
+            "sensor": "sensor",
+        }.get(domain, "entity")
+        cards.append({"type": card_type, "entity": entity_id})
+
+    return [{"name": "Auto Detected", "cards": cards}]
+
+
 def build_dashboard(config: Dict[str, Any]) -> Dict[str, Any]:
     """Convert the config into a Lovelace dashboard structure."""
     views = []
     for room in config.get("rooms", []):
-        views.append(
-            {
-                "title": room.get("name", "Room"),
-                "cards": room.get("cards", []),
-            }
-        )
-    return {"views": views}
+        cards = room.get("cards", [])
+        layout = room.get("layout")
+        if layout in ("horizontal", "vertical"):
+            cards = [{"type": f"{layout}-stack", "cards": cards}]
+
+        views.append({"title": room.get("name", "Room"), "cards": cards})
+
+    dashboard = {"views": views}
+    if "layout" in config:
+        dashboard["layout"] = config["layout"]
+    return dashboard
 
 
 def load_template(path: Path | None) -> Template:
@@ -61,6 +91,17 @@ def generate_dashboard(
     """Generate a dashboard file from config_path written to output_path."""
 
     config = load_config(config_path)
+
+    if config.get("auto_discover"):
+        hass_url = os.environ.get("HASS_URL", "http://localhost:8123")
+        token = os.environ.get("HASS_TOKEN")
+        if token:
+            try:
+                config.setdefault("rooms", []).extend(discover_devices(hass_url, token))
+            except Exception as exc:
+                print(f"Device discovery failed: {exc}")
+        else:
+            print("auto_discover enabled but HASS_TOKEN is not set")
 
     if template_path is not None:
         template = load_template(template_path)
