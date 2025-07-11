@@ -9,5 +9,12 @@ echo "Installing SHI Dashboard to $COMP_DIR"
 mkdir -p "$TARGET_DIR/custom_components"
 cp -r shi_dashboard "$COMP_DIR"
 
-echo "Installation complete. Example configuration can be found in shi_dashboard/config/example_config.yaml"
+CONFIG_FILE="$TARGET_DIR/shi_dashboard.yaml"
+if [ ! -f "$CONFIG_FILE" ]; then
+  cp shi_dashboard/config/example_config.yaml "$CONFIG_FILE"
+  echo "Created default configuration at $CONFIG_FILE"
+fi
+
+python3 -m shi_dashboard.dashboard "$CONFIG_FILE" --output "$TARGET_DIR/ui-lovelace.yaml"
+echo "Installation complete. Dashboard generated."
 
