@@ -12,6 +12,11 @@ Run the provided `install.sh` script to copy the integration into your Home Assi
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for a detailed guide.
 
+### Installing via HACS
+1. In HACS, add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration".
+2. Search for "SHI Dashboard" and install it.
+3. Restart Home Assistant to activate the integration.
+
 ## Getting Started
 
 1. Install the custom integration using the `install.sh` script.
