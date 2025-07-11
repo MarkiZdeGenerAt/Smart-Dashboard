@@ -1,6 +1,6 @@
 {
   "name": "SHI Dashboard",
-  "content_in_root": true,
+  "content_in_root": false,
   "domains": ["shi_dashboard"],
   "homeassistant": "2023.5.0",
   "render_readme": true

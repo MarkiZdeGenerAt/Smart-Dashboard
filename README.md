@@ -9,6 +9,8 @@ Install the add-on through HACS for the simplest setup:
 2. Search for **SHI Dashboard** and install it.
 3. Restart Home Assistant to activate the integration. On first start the integration will
    generate a default `shi_dashboard.yaml` and `ui-lovelace.yaml` for you.
+   The integration files are placed under `custom_components/shi_dashboard` in
+   your Home Assistant configuration.
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
