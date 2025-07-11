@@ -9,6 +9,11 @@ import os
 import yaml
 import requests
 from jinja2 import Template
+import logging
+import sys
+
+
+logger = logging.getLogger(__name__)
 
 
 # Default Jinja2 template used when ``--template`` is not provided.
@@ -98,10 +103,10 @@ def generate_dashboard(
         if token:
             try:
                 config.setdefault("rooms", []).extend(discover_devices(hass_url, token))
-            except Exception as exc:
-                print(f"Device discovery failed: {exc}")
+            except Exception:
+                logger.exception("Device discovery failed")
         else:
-            print("auto_discover enabled but HASS_TOKEN is not set")
+            logger.error("auto_discover enabled but HASS_TOKEN is not set")
 
     if template_path is not None:
         template = load_template(template_path)
@@ -114,6 +119,7 @@ def generate_dashboard(
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
     parser = argparse.ArgumentParser(
         description="Generate SHI Dashboard config"
     )
@@ -135,7 +141,11 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-    generate_dashboard(args.config, args.output, args.template)
+    try:
+        generate_dashboard(args.config, args.output, args.template)
+    except Exception:
+        logger.exception("Dashboard generation failed")
+        sys.exit(1)
     print(f"Dashboard configuration written to {args.output}")
 
 
