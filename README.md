@@ -30,9 +30,18 @@ python3 -m shi_dashboard.dashboard shi_dashboard.yaml --template my_template.j2
 
 4. Reload Lovelace or restart Home Assistant to see the new dashboard.
 
+## Auto Device Detection
+
+Setting `auto_discover: true` in `shi_dashboard.yaml` will query your Home Assistant instance for all available entities. The environment variables `HASS_URL` and `HASS_TOKEN` must be set so the generator can connect to the API.
+
+Discovered devices are added to a room named "Auto Detected" using sensible card types.
+
 ## Example Configuration
 
 ```yaml
+auto_discover: false
+layout:
+  strategy: masonry
 rooms:
   - name: Living Room
     cards:
@@ -40,6 +49,11 @@ rooms:
         entity: climate.living_room
       - type: light
         entity: light.ceiling
+  - name: Bedroom
+    layout: horizontal
+    cards:
+      - type: light
+        entity: light.bedside
 ```
 
-This will generate a simple dashboard with a room view called "Living Room" containing the specified cards.
+This generates a dashboard with two rooms and demonstrates layout configuration. Set `auto_discover` to `true` to automatically include all detected devices.

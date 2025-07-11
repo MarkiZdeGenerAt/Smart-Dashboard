@@ -22,6 +22,8 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
    ```
    Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
 
+   If `auto_discover: true` is set in the configuration, export `HASS_URL` and `HASS_TOKEN` so the generator can query Home Assistant for devices.
+
 5. **Restart Home Assistant** or reload Lovelace to see the generated dashboard.
 
 
