@@ -2,8 +2,12 @@
   "domain": "shi_dashboard",
   "name": "SHI Dashboard",
   "version": "0.2.0",
-  "documentation": "https://github.com/user/shi_dashboard",
-  "requirements": ["pyyaml", "jinja2", "requests"],
+  "documentation": "https://github.com/user/Smart-Dashboard",
+  "requirements": [
+    "pyyaml==6.0.2",
+    "jinja2==3.1.6",
+    "requests==2.32.4"
+  ],
   "dependencies": [],
   "codeowners": []
 }
