@@ -1,0 +1,11 @@
+rooms:
+  - name: Living Room
+    cards:
+      - type: thermostat
+        entity: climate.living_room
+      - type: light
+        entity: light.ceiling
+  - name: Bedroom
+    cards:
+      - type: light
+        entity: light.bedside
