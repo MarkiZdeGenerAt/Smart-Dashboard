@@ -7,22 +7,19 @@ SHI Dashboard is a customizable dashboard add-on for Home Assistant. It allows u
 Install the add-on through HACS for the simplest setup:
 1. In HACS, add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration".
 2. Search for **SHI Dashboard** and install it.
-3. Restart Home Assistant to activate the integration.
+3. Restart Home Assistant to activate the integration. On first start the integration will
+   generate a default `shi_dashboard.yaml` and `ui-lovelace.yaml` for you.
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
 ## Getting Started
 
-1. After installing through HACS, place your configuration file (see `shi_dashboard/config/example_config.yaml` for reference) in the Home Assistant configuration directory as `shi_dashboard.yaml`.
-2. Run the generator to produce a Lovelace dashboard file:
-```bash
-python3 -m shi_dashboard.dashboard shi_dashboard.yaml --output ui-lovelace.yaml
-```
-3. You can also provide your own Jinja2 template to fully customise the output:
-```bash
-python3 -m shi_dashboard.dashboard shi_dashboard.yaml --template my_template.j2
-```
-4. Reload Lovelace or restart Home Assistant to see the new dashboard.
+1. Restart Home Assistant after installing the integration.
+   A default configuration will be created as `shi_dashboard.yaml` and a dashboard
+   generated as `ui-lovelace.yaml`.
+2. Reload Lovelace or restart Home Assistant again to see the new dashboard.
+3. You can edit `shi_dashboard.yaml` at any time to customise the layout and run
+   the generator manually if you wish.
 
 ## Auto Device Detection
 

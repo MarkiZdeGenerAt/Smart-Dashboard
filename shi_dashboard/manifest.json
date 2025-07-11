@@ -1,7 +1,7 @@
 {
   "domain": "shi_dashboard",
   "name": "SHI Dashboard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "documentation": "https://github.com/user/shi_dashboard",
   "requirements": ["pyyaml", "jinja2", "requests"],
   "dependencies": [],
