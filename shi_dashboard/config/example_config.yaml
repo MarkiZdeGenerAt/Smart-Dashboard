@@ -3,6 +3,7 @@ rooms:
     cards:
       - type: thermostat
         entity: climate.living_room
+        name: HVAC
       - type: light
         entity: light.ceiling
   - name: Bedroom

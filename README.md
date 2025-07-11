@@ -12,6 +12,12 @@ SHI Dashboard is a customizable dashboard add-on for Home Assistant. It allows u
 python3 -m shi_dashboard.dashboard shi_dashboard.yaml --output ui-lovelace.yaml
 ```
 
+You can also provide your own Jinja2 template to fully customise the output:
+
+```bash
+python3 -m shi_dashboard.dashboard shi_dashboard.yaml --template my_template.j2
+```
+
 4. Reload Lovelace or restart Home Assistant to see the new dashboard.
 
 ## Example Configuration
