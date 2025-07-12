@@ -7,8 +7,9 @@ SHI Dashboard is a customizable dashboard add-on for Home Assistant. It allows u
 Install the add-on through HACS for the simplest setup:
 1. In HACS, add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration".
 2. Search for **SHI Dashboard** and install it.
-3. Restart Home Assistant to activate the integration. On first start the integration will
-   generate a default `shi_dashboard.yaml` and `ui-lovelace.yaml` for you.
+3. Open **Settings → Devices & Services** in Home Assistant and choose **Add Integration**.
+   Select **SHI Dashboard** to complete the setup.
+4. Restart Home Assistant to generate the default `shi_dashboard.yaml` and `ui-lovelace.yaml`.
    The integration files are placed under `custom_components/shi_dashboard` in
    your Home Assistant configuration.
 

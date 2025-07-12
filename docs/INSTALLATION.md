@@ -5,7 +5,9 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
 ## Installing via HACS
 1. In HACS, add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration".
 2. Search for **SHI Dashboard** in HACS and install it.
-3. Restart Home Assistant to activate the integration.
+3. In Home Assistant open **Settings → Devices & Services** and click **Add Integration**.
+   Choose **SHI Dashboard** to create the configuration entry.
+4. Restart Home Assistant to activate the integration.
 
 ## Generating a Dashboard
 1. On first start, a default `shi_dashboard.yaml` configuration and `ui-lovelace.yaml`
