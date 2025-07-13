@@ -9,7 +9,7 @@ from pathlib import Path
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 
-from .const import DOMAIN
+from .const import DOMAIN, DASHBOARD_DIR, DASHBOARD_FILE
 
 from .dashboard import generate_dashboard
 
@@ -32,7 +32,9 @@ def _create_default_config(hass: HomeAssistant) -> Path:
 def _generate_dashboard_files(hass: HomeAssistant) -> None:
     """Generate dashboard files from configuration."""
     config_path = _create_default_config(hass)
-    output_path = Path(hass.config.path("ui-lovelace.yaml"))
+    output_dir = Path(hass.config.path(DASHBOARD_DIR))
+    output_dir.mkdir(exist_ok=True)
+    output_path = output_dir / DASHBOARD_FILE
     try:
         generate_dashboard(config_path, output_path)
         _LOGGER.info("Generated dashboard at %s", output_path)
