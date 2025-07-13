@@ -15,6 +15,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
   echo "Created default configuration at $CONFIG_FILE"
 fi
 
-python3 custom_components/shi_dashboard/dashboard.py "$CONFIG_FILE" --output "$TARGET_DIR/ui-lovelace.yaml"
+mkdir -p "$TARGET_DIR/dashboards"
+python3 custom_components/shi_dashboard/dashboard.py "$CONFIG_FILE" --output "$TARGET_DIR/dashboards/shi_dashboard.yaml"
 echo "Installation complete. Dashboard generated."
 

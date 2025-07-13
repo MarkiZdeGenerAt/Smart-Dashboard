@@ -9,7 +9,8 @@ Install the add-on through HACS for the simplest setup:
 2. Search for **SHI Dashboard** and install it.
 3. Open **Settings → Devices & Services** in Home Assistant and choose **Add Integration**.
    Select **SHI Dashboard** to complete the setup.
-4. Restart Home Assistant to generate the default `shi_dashboard.yaml` and `ui-lovelace.yaml`.
+4. Restart Home Assistant to generate the default `shi_dashboard.yaml` and
+   `dashboards/shi_dashboard.yaml`.
    The integration files are placed under `custom_components/shi_dashboard` in
    your Home Assistant configuration.
 
@@ -19,9 +20,22 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
 1. Restart Home Assistant after installing the integration.
    A default configuration will be created as `shi_dashboard.yaml` and a dashboard
-   generated as `ui-lovelace.yaml`.
-2. Reload Lovelace or restart Home Assistant again to see the new dashboard.
-3. You can edit `shi_dashboard.yaml` at any time to customise the layout and run
+   generated at `dashboards/shi_dashboard.yaml`.
+2. Add the following to your `configuration.yaml` to show the dashboard
+   automatically:
+
+   ```yaml
+   lovelace:
+     dashboards:
+       shi_dashboard:
+         mode: yaml
+         title: SHI Dashboard
+         icon: mdi:monitor-dashboard
+         show_in_sidebar: true
+         filename: dashboards/shi_dashboard.yaml
+   ```
+3. Reload Lovelace or restart Home Assistant again to see the new dashboard.
+4. You can edit `shi_dashboard.yaml` at any time to customise the layout and run
    the generator manually if you wish.
 
 ## Auto Device Detection
