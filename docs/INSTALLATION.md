@@ -15,7 +15,7 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
 2. Reload Lovelace or restart Home Assistant again to see the dashboard.
 3. You can modify `shi_dashboard.yaml` and run the generator manually:
    ```bash
-   python3 -m custom_components.shi_dashboard.dashboard shi_dashboard.yaml --output ui-lovelace.yaml
+   python3 custom_components/shi_dashboard/dashboard.py shi_dashboard.yaml --output ui-lovelace.yaml
    ```
    Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
 
