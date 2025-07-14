@@ -12,6 +12,16 @@ from jinja2 import Template
 import logging
 import sys
 
+# Allow running this file directly
+if __name__ == "__main__" and __package__ is None:
+    sys.path.append(str(Path(__file__).resolve().parents[1]))
+    __package__ = "shi_dashboard"
+
+try:
+    from .plugins import load_plugins, run_plugins
+except ImportError:  # pragma: no cover - running as script
+    from plugins import load_plugins, run_plugins  # type: ignore
+
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +106,10 @@ def generate_dashboard(
     """Generate a dashboard file from config_path written to output_path."""
 
     config = load_config(config_path)
+
+    # Load and execute any available plugins before building the dashboard
+    load_plugins()
+    run_plugins(config)
 
     if config.get("auto_discover"):
         hass_url = os.environ.get("HASS_URL", "http://localhost:8123")
