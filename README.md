@@ -38,6 +38,15 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 4. You can edit `shi_dashboard.yaml` at any time to customise the layout and run
    the generator manually if you wish.
 
+## Requirements
+
+If you run the dashboard generator outside of Home Assistant, install the
+following Python packages first:
+
+```bash
+pip install homeassistant pyyaml jinja2 requests
+```
+
 ## Auto Device Detection
 
 `auto_discover` is enabled by default and will query your Home Assistant instance for all registered entities. When the generator runs inside Home Assistant the API credentials are used automatically. If you run the generator manually outside of Home Assistant, set the environment variables `HASS_URL` and `HASS_TOKEN` so it can connect to the API. Discovered entities are grouped by their assigned area when possible, similar to Dwains Dashboard. If area information cannot be retrieved everything is placed in a single "Auto Detected" room.

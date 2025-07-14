@@ -13,7 +13,11 @@ from jinja2 import Template
 import logging
 import sys
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import area_registry as ar, device_registry as dr, entity_registry as er
+from homeassistant.helpers import (
+    area_registry as ar,
+    device_registry as dr,
+    entity_registry as er,
+)
 
 # Allow running this file directly
 if __name__ == "__main__" and __package__ is None:
@@ -53,18 +57,26 @@ def load_config(path: Path) -> Dict[str, Any]:
 
 
 def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
-    """Return a list of rooms generated from available Home Assistant devices."""
+    """Return rooms generated from available Home Assistant devices."""
 
     headers = {"Authorization": f"Bearer {token}"}
 
-    resp = requests.get(f"{hass_url.rstrip('/')}/api/states", headers=headers, timeout=10)
+    resp = requests.get(
+        f"{hass_url.rstrip('/')}/api/states",
+        headers=headers,
+        timeout=10,
+    )
     resp.raise_for_status()
     states = resp.json()
 
     # Try to fetch area, device and entity registries to map entities to areas
     areas: Dict[str | None, str] = {}
     try:
-        a_resp = requests.get(f"{hass_url.rstrip('/')}/api/areas", headers=headers, timeout=10)
+        a_resp = requests.get(
+            f"{hass_url.rstrip('/')}/api/areas",
+            headers=headers,
+            timeout=10,
+        )
         a_resp.raise_for_status()
         for area in a_resp.json():
             area_id = area.get("area_id") or area.get("id")
@@ -75,7 +87,11 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
 
     device_areas: Dict[str, str | None] = {}
     try:
-        d_resp = requests.get(f"{hass_url.rstrip('/')}/api/devices", headers=headers, timeout=10)
+        d_resp = requests.get(
+            f"{hass_url.rstrip('/')}/api/devices",
+            headers=headers,
+            timeout=10,
+        )
         d_resp.raise_for_status()
         for dev in d_resp.json():
             dev_id = dev.get("id") or dev.get("device_id")
@@ -85,7 +101,11 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
 
     entity_devices: Dict[str, str] = {}
     try:
-        e_resp = requests.get(f"{hass_url.rstrip('/')}/api/entities", headers=headers, timeout=10)
+        e_resp = requests.get(
+            f"{hass_url.rstrip('/')}/api/entities",
+            headers=headers,
+            timeout=10,
+        )
         e_resp.raise_for_status()
         for ent in e_resp.json():
             entity_devices[ent.get("entity_id")] = ent.get("device_id")
@@ -110,13 +130,19 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
 
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
-        area_name = areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
-        rooms.setdefault(area_name, []).append({"type": card_type, "entity": entity_id})
+        area_name = (
+            areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+        )
+        rooms.setdefault(area_name, []).append(
+            {"type": card_type, "entity": entity_id}
+        )
 
     return [{"name": name, "cards": cards} for name, cards in rooms.items()]
 
 
-async def async_discover_devices_internal(hass: HomeAssistant) -> List[Dict[str, Any]]:
+async def async_discover_devices_internal(
+    hass: HomeAssistant,
+) -> List[Dict[str, Any]]:
     """Return rooms generated using Home Assistant's internal registries."""
 
     states = hass.states.async_all()
@@ -151,8 +177,12 @@ async def async_discover_devices_internal(hass: HomeAssistant) -> List[Dict[str,
 
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
-        area_name = areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
-        rooms.setdefault(area_name, []).append({"type": card_type, "entity": entity_id})
+        area_name = (
+            areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+        )
+        rooms.setdefault(area_name, []).append(
+            {"type": card_type, "entity": entity_id}
+        )
 
     return [{"name": name, "cards": cards} for name, cards in rooms.items()]
 
@@ -207,11 +237,15 @@ def generate_dashboard(
             except Exception:
                 logger.exception("Device discovery failed")
         else:
-            hass_url = os.environ.get("HASS_URL", "http://localhost:8123")
+            hass_url = os.environ.get(
+                "HASS_URL", "http://localhost:8123"
+            )
             token = os.environ.get("HASS_TOKEN")
             if token:
                 try:
-                    config.setdefault("rooms", []).extend(discover_devices(hass_url, token))
+                    config.setdefault("rooms", []).extend(
+                        discover_devices(hass_url, token)
+                    )
                 except Exception:
                     logger.exception("Device discovery failed")
             else:
@@ -228,7 +262,10 @@ def generate_dashboard(
 
 
 def main() -> None:
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s:%(name)s:%(message)s",
+    )
     parser = argparse.ArgumentParser(
         description="Generate SHI Dashboard config"
     )
