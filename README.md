@@ -58,6 +58,16 @@ configuration before the dashboard is generated. Each plugin should define a
 `process_config(config)` function. The provided `header_card` plugin inserts a
 markdown header card into every room.
 
+The `blueprint_loader` plugin loads any YAML files found in
+`custom_components/shi_dashboard/blueprints` and appends them as additional
+rooms. This mimics the blueprint system in Dwains Dashboard for quickly adding
+predefined layouts.
+
+Translation files located under `custom_components/shi_dashboard/translations`
+allow the dashboard to be generated in different languages. Set the `SHI_LANG`
+environment variable (e.g. `en` or `fr`) to select the language. If no
+translation is found English is used by default.
+
 ## Example Configuration
 
 ```yaml

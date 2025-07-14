@@ -1,0 +1,4 @@
+name: Example Blueprint Room
+cards:
+  - type: markdown
+    content: Example blueprint card
