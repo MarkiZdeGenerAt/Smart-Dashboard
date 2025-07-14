@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import argparse
 import os
+import asyncio
 import yaml
 import requests
 from jinja2 import Template
 import logging
 import sys
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import area_registry as ar, device_registry as dr, entity_registry as er
 
 # Allow running this file directly
 if __name__ == "__main__" and __package__ is None:
@@ -113,6 +116,47 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
     return [{"name": name, "cards": cards} for name, cards in rooms.items()]
 
 
+async def async_discover_devices_internal(hass: HomeAssistant) -> List[Dict[str, Any]]:
+    """Return rooms generated using Home Assistant's internal registries."""
+
+    states = hass.states.async_all()
+
+    area_reg = await ar.async_get_registry(hass)
+    device_reg = await dr.async_get_registry(hass)
+    entity_reg = await er.async_get_registry(hass)
+
+    areas: Dict[str | None, str] = {
+        area.id: area.name for area in area_reg.async_list_areas()
+    }
+    device_areas: Dict[str, str | None] = {
+        device.id: device.area_id for device in device_reg.devices.values()
+    }
+    entity_devices: Dict[str, str] = {
+        ent.entity_id: ent.device_id for ent in entity_reg.entities.values()
+    }
+
+    rooms: Dict[str, List[Dict[str, Any]]] = {}
+    for state in states:
+        entity_id = state.entity_id
+        domain = entity_id.split(".")[0]
+        card_type = {
+            "light": "light",
+            "switch": "switch",
+            "climate": "thermostat",
+            "sensor": "sensor",
+            "cover": "cover",
+            "media_player": "media-control",
+            "binary_sensor": "sensor",
+        }.get(domain, "entity")
+
+        device_id = entity_devices.get(entity_id)
+        area_id = device_areas.get(device_id)
+        area_name = areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+        rooms.setdefault(area_name, []).append({"type": card_type, "entity": entity_id})
+
+    return [{"name": name, "cards": cards} for name, cards in rooms.items()]
+
+
 def build_dashboard(config: Dict[str, Any]) -> Dict[str, Any]:
     """Convert the config into a Lovelace dashboard structure."""
     views = []
@@ -142,6 +186,7 @@ def generate_dashboard(
     config_path: Path,
     output_path: Path,
     template_path: Path | None = None,
+    hass: Optional[HomeAssistant] = None,
 ) -> None:
     """Generate a dashboard file from config_path written to output_path."""
 
@@ -152,15 +197,25 @@ def generate_dashboard(
     run_plugins(config)
 
     if config.get("auto_discover"):
-        hass_url = os.environ.get("HASS_URL", "http://localhost:8123")
-        token = os.environ.get("HASS_TOKEN")
-        if token:
+        if hass is not None:
             try:
-                config.setdefault("rooms", []).extend(discover_devices(hass_url, token))
+                future = asyncio.run_coroutine_threadsafe(
+                    async_discover_devices_internal(hass), hass.loop
+                )
+                rooms = future.result()
+                config.setdefault("rooms", []).extend(rooms)
             except Exception:
                 logger.exception("Device discovery failed")
         else:
-            logger.error("auto_discover enabled but HASS_TOKEN is not set")
+            hass_url = os.environ.get("HASS_URL", "http://localhost:8123")
+            token = os.environ.get("HASS_TOKEN")
+            if token:
+                try:
+                    config.setdefault("rooms", []).extend(discover_devices(hass_url, token))
+                except Exception:
+                    logger.exception("Device discovery failed")
+            else:
+                logger.error("auto_discover enabled but HASS_TOKEN is not set")
 
     if template_path is not None:
         template = load_template(template_path)

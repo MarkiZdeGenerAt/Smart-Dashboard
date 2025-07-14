@@ -29,14 +29,16 @@ def _create_default_config(hass: HomeAssistant) -> Path:
     return config_path
 
 
-def _generate_dashboard_files(hass: HomeAssistant) -> None:
+async def _generate_dashboard_files(hass: HomeAssistant) -> None:
     """Generate dashboard files from configuration."""
     config_path = _create_default_config(hass)
     output_dir = Path(hass.config.path(DASHBOARD_DIR))
     output_dir.mkdir(exist_ok=True)
     output_path = output_dir / DASHBOARD_FILE
     try:
-        generate_dashboard(config_path, output_path)
+        await hass.async_add_executor_job(
+            generate_dashboard, config_path, output_path, None, hass
+        )
         _LOGGER.info("Generated dashboard at %s", output_path)
     except Exception as err:  # pragma: no cover - runtime environment
         _LOGGER.error("Dashboard generation failed: %s", err)
@@ -44,13 +46,13 @@ def _generate_dashboard_files(hass: HomeAssistant) -> None:
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up via YAML is deprecated; create files and do nothing else."""
-    _generate_dashboard_files(hass)
+    await _generate_dashboard_files(hass)
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up SHI Dashboard from a config entry."""
-    _generate_dashboard_files(hass)
+    await _generate_dashboard_files(hass)
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = True
     return True
 
