@@ -40,9 +40,7 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
 ## Auto Device Detection
 
-Setting `auto_discover: true` in `shi_dashboard.yaml` will query your Home Assistant instance for all available entities. The environment variables `HASS_URL` and `HASS_TOKEN` must be set so the generator can connect to the API.
-
-Discovered devices are added to a room named "Auto Detected" using sensible card types.
+Setting `auto_discover: true` in `shi_dashboard.yaml` will query your Home Assistant instance for all registered entities. The environment variables `HASS_URL` and `HASS_TOKEN` must be set so the generator can connect to the API. Discovered entities are grouped by their assigned area when possible, similar to Dwains Dashboard. If area information cannot be retrieved everything is placed in a single "Auto Detected" room.
 
 ## Plugins
 

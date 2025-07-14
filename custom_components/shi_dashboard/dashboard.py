@@ -51,12 +51,45 @@ def load_config(path: Path) -> Dict[str, Any]:
 
 def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
     """Return a list of rooms generated from available Home Assistant devices."""
+
     headers = {"Authorization": f"Bearer {token}"}
+
     resp = requests.get(f"{hass_url.rstrip('/')}/api/states", headers=headers, timeout=10)
     resp.raise_for_status()
     states = resp.json()
 
-    cards = []
+    # Try to fetch area, device and entity registries to map entities to areas
+    areas: Dict[str | None, str] = {}
+    try:
+        a_resp = requests.get(f"{hass_url.rstrip('/')}/api/areas", headers=headers, timeout=10)
+        a_resp.raise_for_status()
+        for area in a_resp.json():
+            area_id = area.get("area_id") or area.get("id")
+            name = area.get("name") or "Area"
+            areas[area_id] = name
+    except Exception:  # pragma: no cover - runtime environment
+        logger.info("Area lookup failed, falling back to single room")
+
+    device_areas: Dict[str, str | None] = {}
+    try:
+        d_resp = requests.get(f"{hass_url.rstrip('/')}/api/devices", headers=headers, timeout=10)
+        d_resp.raise_for_status()
+        for dev in d_resp.json():
+            dev_id = dev.get("id") or dev.get("device_id")
+            device_areas[dev_id] = dev.get("area_id")
+    except Exception:  # pragma: no cover - runtime environment
+        pass
+
+    entity_devices: Dict[str, str] = {}
+    try:
+        e_resp = requests.get(f"{hass_url.rstrip('/')}/api/entities", headers=headers, timeout=10)
+        e_resp.raise_for_status()
+        for ent in e_resp.json():
+            entity_devices[ent.get("entity_id")] = ent.get("device_id")
+    except Exception:  # pragma: no cover - runtime environment
+        pass
+
+    rooms: Dict[str, List[Dict[str, Any]]] = {}
     for state in states:
         entity_id = state.get("entity_id")
         if not entity_id:
@@ -67,10 +100,17 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
             "switch": "switch",
             "climate": "thermostat",
             "sensor": "sensor",
+            "cover": "cover",
+            "media_player": "media-control",
+            "binary_sensor": "sensor",
         }.get(domain, "entity")
-        cards.append({"type": card_type, "entity": entity_id})
 
-    return [{"name": "Auto Detected", "cards": cards}]
+        device_id = entity_devices.get(entity_id)
+        area_id = device_areas.get(device_id)
+        area_name = areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+        rooms.setdefault(area_name, []).append({"type": card_type, "entity": entity_id})
+
+    return [{"name": name, "cards": cards} for name, cards in rooms.items()]
 
 
 def build_dashboard(config: Dict[str, Any]) -> Dict[str, Any]:

@@ -32,7 +32,7 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
    ```
   Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
 
-  If `auto_discover: true` is set in the configuration, export `HASS_URL` and `HASS_TOKEN` so the generator can query Home Assistant for devices.
+  If `auto_discover: true` is set in the configuration, export `HASS_URL` and `HASS_TOKEN` so the generator can query Home Assistant for devices. When available, discovered entities are grouped by area to mimic Dwains Dashboard. If areas cannot be retrieved they are placed in a single "Auto Detected" room.
 
 ## Using Plugins
 
