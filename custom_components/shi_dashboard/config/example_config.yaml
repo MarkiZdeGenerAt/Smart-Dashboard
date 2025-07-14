@@ -1,16 +1,6 @@
-auto_discover: false
+auto_discover: true
 layout:
   strategy: masonry
-rooms:
-  - name: Living Room
-    cards:
-      - type: thermostat
-        entity: climate.living_room
-        name: HVAC
-      - type: light
-        entity: light.ceiling
-  - name: Bedroom
-    layout: horizontal
-    cards:
-      - type: light
-        entity: light.bedside
+
+# No predefined rooms are needed when auto discovery is enabled. Devices will
+# be grouped by their Home Assistant area automatically.

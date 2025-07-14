@@ -40,7 +40,7 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
 ## Auto Device Detection
 
-Setting `auto_discover: true` in `shi_dashboard.yaml` will query your Home Assistant instance for all registered entities. When the generator runs inside Home Assistant the API credentials are used automatically. If you run the generator manually outside of Home Assistant, set the environment variables `HASS_URL` and `HASS_TOKEN` so it can connect to the API. Discovered entities are grouped by their assigned area when possible, similar to Dwains Dashboard. If area information cannot be retrieved everything is placed in a single "Auto Detected" room.
+`auto_discover` is enabled by default and will query your Home Assistant instance for all registered entities. When the generator runs inside Home Assistant the API credentials are used automatically. If you run the generator manually outside of Home Assistant, set the environment variables `HASS_URL` and `HASS_TOKEN` so it can connect to the API. Discovered entities are grouped by their assigned area when possible, similar to Dwains Dashboard. If area information cannot be retrieved everything is placed in a single "Auto Detected" room.
 
 ## Plugins
 
@@ -52,21 +52,10 @@ markdown header card into every room.
 ## Example Configuration
 
 ```yaml
-auto_discover: false
+auto_discover: true
 layout:
   strategy: masonry
-rooms:
-  - name: Living Room
-    cards:
-      - type: thermostat
-        entity: climate.living_room
-      - type: light
-        entity: light.ceiling
-  - name: Bedroom
-    layout: horizontal
-    cards:
-      - type: light
-        entity: light.bedside
 ```
 
-This generates a dashboard with two rooms and demonstrates layout configuration. Set `auto_discover` to `true` to automatically include all detected devices.
+With auto discovery enabled the integration will query Home Assistant for all
+entities and group them by their assigned area, similar to Dwains Dashboard.
