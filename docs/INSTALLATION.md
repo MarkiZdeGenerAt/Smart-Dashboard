@@ -17,7 +17,7 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
    ```yaml
    lovelace:
      dashboards:
-       shi_dashboard:
+       shi-dashboard:
          mode: yaml
          title: SHI Dashboard
          icon: mdi:monitor-dashboard

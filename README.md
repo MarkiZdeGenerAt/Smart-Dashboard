@@ -27,7 +27,7 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
    ```yaml
    lovelace:
      dashboards:
-       shi_dashboard:
+       shi-dashboard:
          mode: yaml
          title: SHI Dashboard
          icon: mdi:monitor-dashboard
