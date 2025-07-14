@@ -30,8 +30,14 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
    python3 custom_components/shi_dashboard/dashboard.py shi_dashboard.yaml \
        --output dashboards/shi_dashboard.yaml
    ```
-   Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
+  Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
 
-   If `auto_discover: true` is set in the configuration, export `HASS_URL` and `HASS_TOKEN` so the generator can query Home Assistant for devices.
+  If `auto_discover: true` is set in the configuration, export `HASS_URL` and `HASS_TOKEN` so the generator can query Home Assistant for devices.
+
+## Using Plugins
+
+Place additional Python modules in `custom_components/shi_dashboard/plugins`.
+Each module should define `process_config(config)` which will be called during
+dashboard generation. See `header_card.py` for a simple example.
 
 

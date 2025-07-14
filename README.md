@@ -44,6 +44,13 @@ Setting `auto_discover: true` in `shi_dashboard.yaml` will query your Home Assis
 
 Discovered devices are added to a room named "Auto Detected" using sensible card types.
 
+## Plugins
+
+Plugins placed in `custom_components/shi_dashboard/plugins` can modify the
+configuration before the dashboard is generated. Each plugin should define a
+`process_config(config)` function. The provided `header_card` plugin inserts a
+markdown header card into every room.
+
 ## Example Configuration
 
 ```yaml

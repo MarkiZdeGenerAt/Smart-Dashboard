@@ -1,7 +1,7 @@
 {
   "domain": "shi_dashboard",
   "name": "SHI Dashboard",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "documentation": "https://github.com/user/Smart-Dashboard",
   "requirements": [
     "pyyaml==6.0.2",
