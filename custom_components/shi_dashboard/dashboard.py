@@ -12,6 +12,7 @@ import requests
 from jinja2 import Template
 import logging
 import sys
+import json
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import (
     area_registry as ar,
@@ -31,6 +32,32 @@ except ImportError:  # pragma: no cover - running as script
 
 
 logger = logging.getLogger(__name__)
+
+
+# --- Translation helpers ----------------------------------------------------
+_TRANSLATIONS: Dict[str, Dict[str, str]] = {}
+
+
+def load_translations(lang: str) -> Dict[str, str]:
+    """Load translation dictionary for *lang* from the translations folder."""
+    if lang in _TRANSLATIONS:
+        return _TRANSLATIONS[lang]
+    trans_path = Path(__file__).parent / "translations" / f"{lang}.json"
+    if not trans_path.exists():
+        _TRANSLATIONS[lang] = {}
+    else:
+        try:
+            with trans_path.open() as f:
+                _TRANSLATIONS[lang] = json.load(f)
+        except Exception:  # pragma: no cover - runtime environment
+            _TRANSLATIONS[lang] = {}
+    return _TRANSLATIONS[lang]
+
+
+def t(key: str, lang: str, default: str) -> str:
+    """Return translated string for ``key`` or ``default`` if missing."""
+    return load_translations(lang).get(key, default)
+
 
 
 # Default Jinja2 template used when ``--template`` is not provided.
@@ -56,7 +83,7 @@ def load_config(path: Path) -> Dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
-def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
+def discover_devices(hass_url: str, token: str, lang: str) -> List[Dict[str, Any]]:
     """Return rooms generated from available Home Assistant devices."""
 
     headers = {"Authorization": f"Bearer {token}"}
@@ -131,7 +158,9 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
         area_name = (
-            areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+            areas.get(area_id, t("auto_detected", lang, "Auto Detected"))
+            if areas
+            else t("auto_detected", lang, "Auto Detected")
         )
         rooms.setdefault(area_name, []).append(
             {"type": card_type, "entity": entity_id}
@@ -142,6 +171,7 @@ def discover_devices(hass_url: str, token: str) -> List[Dict[str, Any]]:
 
 async def async_discover_devices_internal(
     hass: HomeAssistant,
+    lang: str,
 ) -> List[Dict[str, Any]]:
     """Return rooms generated using Home Assistant's internal registries."""
 
@@ -178,7 +208,9 @@ async def async_discover_devices_internal(
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
         area_name = (
-            areas.get(area_id, "Auto Detected") if areas else "Auto Detected"
+            areas.get(area_id, t("auto_detected", lang, "Auto Detected"))
+            if areas
+            else t("auto_detected", lang, "Auto Detected")
         )
         rooms.setdefault(area_name, []).append(
             {"type": card_type, "entity": entity_id}
@@ -187,7 +219,7 @@ async def async_discover_devices_internal(
     return [{"name": name, "cards": cards} for name, cards in rooms.items()]
 
 
-def build_dashboard(config: Dict[str, Any]) -> Dict[str, Any]:
+def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
     """Convert the config into a Lovelace dashboard structure."""
     views = []
     for room in config.get("rooms", []):
@@ -196,7 +228,7 @@ def build_dashboard(config: Dict[str, Any]) -> Dict[str, Any]:
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]
 
-        views.append({"title": room.get("name", "Room"), "cards": cards})
+        views.append({"title": room.get("name", t("room", lang, "Room")), "cards": cards})
 
     dashboard = {"views": views}
     if "layout" in config:
@@ -220,6 +252,7 @@ def generate_dashboard(
 ) -> None:
     """Generate a dashboard file from config_path written to output_path."""
 
+    lang = os.environ.get("SHI_LANG", "en")
     config = load_config(config_path)
 
     # Load and execute any available plugins before building the dashboard
@@ -230,7 +263,7 @@ def generate_dashboard(
         if hass is not None:
             try:
                 future = asyncio.run_coroutine_threadsafe(
-                    async_discover_devices_internal(hass), hass.loop
+                    async_discover_devices_internal(hass, lang), hass.loop
                 )
                 rooms = future.result()
                 config.setdefault("rooms", []).extend(rooms)
@@ -244,7 +277,7 @@ def generate_dashboard(
             if token:
                 try:
                     config.setdefault("rooms", []).extend(
-                        discover_devices(hass_url, token)
+                        discover_devices(hass_url, token, lang)
                     )
                 except Exception:
                     logger.exception("Device discovery failed")
@@ -255,7 +288,7 @@ def generate_dashboard(
         template = load_template(template_path)
         rendered = template.render(rooms=config.get("rooms", []))
     else:
-        dashboard = build_dashboard(config)
+        dashboard = build_dashboard(config, lang)
         rendered = yaml.safe_dump(dashboard, sort_keys=False)
 
     output_path.write_text(rendered)
