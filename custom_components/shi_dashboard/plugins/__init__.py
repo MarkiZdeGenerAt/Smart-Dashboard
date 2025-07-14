@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from importlib import import_module, util
+from importlib import util
 from pathlib import Path
 from typing import Callable, Dict, Any, List
 
@@ -31,6 +31,9 @@ def run_plugins(config: Dict[str, Any]) -> None:
     for plugin in PLUGINS:
         try:
             plugin(config)
-        except Exception as err:  # pragma: no cover - plugin errors shouldn't crash
+        except Exception as err:
+            # pragma: no cover - plugin errors shouldn't crash
             import logging
-            logging.getLogger(__name__).error("Plugin %s failed: %s", plugin.__name__, err)
+            logging.getLogger(__name__).error(
+                "Plugin %s failed: %s", plugin.__name__, err
+            )
