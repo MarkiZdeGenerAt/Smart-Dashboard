@@ -46,8 +46,6 @@ generate the dashboard in a different language.
 
 ## Plugins
 
-Modules placed in `custom_components/smart_dashboard/plugins` can modify the
-configuration before generation. Each module should define
-`process_config(config)`. See `header_card.py` for an example.
+Modules placed in `custom_components/smart_dashboard/plugins` can modify the configuration before generation. Each module should define `process_config(config)`.
 
 

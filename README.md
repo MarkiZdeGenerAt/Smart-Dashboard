@@ -59,15 +59,7 @@ pip install homeassistant pyyaml jinja2 requests
 ## Plugins
 
 Plugins placed in `custom_components/smart_dashboard/plugins` can modify the
-configuration before the dashboard is generated. Each plugin should define a
-`process_config(config)` function. The provided `header_card` plugin inserts a
-markdown header card into every room.
-
-The `blueprint_loader` plugin loads any YAML files found in
-`custom_components/smart_dashboard/blueprints` and appends them as additional
-rooms. This mimics the blueprint system in Dwains Dashboard for quickly adding
-predefined layouts.
-
+configuration before the dashboard is generated. Each plugin should define a `process_config(config)` function.
 The `dwains_style` plugin creates a Dwains Dashboard inspired navigation bar. It
 automatically adds each room as a sidebar shortcut, enables the clock in the
 header and applies a default `dwains` theme. It also loads a small JavaScript
