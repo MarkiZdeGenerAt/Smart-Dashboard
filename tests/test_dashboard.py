@@ -15,6 +15,7 @@ def test_overview_generation():
     }
     dash = build_dashboard(cfg, "en")
     assert dash["views"][0]["title"] == "Overview"
+    assert dash["views"][1]["title"] == "Devices"
     assert dash["views"][0]["cards"][0]["tap_action"]["navigation_path"] == "/lovelace/living-room"
-    assert dash["views"][1]["path"] == "living-room"
-    assert dash["views"][2]["path"] == "kitchen"
+    assert dash["views"][2]["path"] == "living-room"
+    assert dash["views"][3]["path"] == "kitchen"
