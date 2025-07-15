@@ -148,3 +148,15 @@ Usage inside a dashboard:
   sd.start();
 </script>
 ```
+
+## UI Config Editor
+
+A command line helper `ui_config_editor.py` lets you modify `smart_dashboard.yaml` without manual editing. It can rearrange cards, hide or show rooms and manage sidebar shortcuts used as quick links on the home screen.
+
+Usage example:
+
+```bash
+python3 -m custom_components.smart_dashboard.ui_config_editor smart_dashboard.yaml move-card "Living" 0 1
+```
+
+Run the script with `--help` to see all available commands.

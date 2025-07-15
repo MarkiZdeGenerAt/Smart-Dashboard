@@ -12,6 +12,7 @@ ROOM_SCHEMA = vol.Schema(
         vol.Optional("layout"): vol.In(["horizontal", "vertical"]),
         vol.Optional("cards", default=[]): [CARD_SCHEMA],
         vol.Optional("conditions"): [str],
+        vol.Optional("hidden", default=False): bool,
     },
     extra=vol.ALLOW_EXTRA,
 )
