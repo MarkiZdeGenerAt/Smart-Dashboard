@@ -8,6 +8,7 @@ CARD_SCHEMA = vol.Schema(
 ROOM_SCHEMA = vol.Schema(
     {
         vol.Required("name"): str,
+        vol.Optional("icon"): str,
         vol.Optional("order"): vol.Coerce(int),
         vol.Optional("layout"): vol.In(["horizontal", "vertical"]),
         vol.Optional("cards", default=[]): [CARD_SCHEMA],

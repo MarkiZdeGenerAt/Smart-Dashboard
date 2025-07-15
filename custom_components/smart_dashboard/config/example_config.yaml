@@ -14,8 +14,15 @@ sidebar:
 layout:
   strategy: masonry
 theme: auto
+button_card_templates:
+  device_tile:
+    show_icon: true
+    show_name: true
+  light_tile:
+    template: device_tile
 rooms:
   - name: Гостиная
+    icon: mdi:sofa
     order: 1
     cards:
       - type: light
@@ -25,6 +32,7 @@ rooms:
           - sensor.temperature
           - binary_sensor.front_door
   - name: Кухня
+    icon: mdi:silverware-fork-knife
     conditions:
       - state('binary_sensor.kitchen_motion') == 'on'
     cards:

@@ -16,9 +16,17 @@ def test_overview_generation():
     dash = build_dashboard(cfg, "en")
     assert dash["views"][0]["title"] == "Overview"
     assert dash["views"][1]["title"] == "Devices"
-    assert dash["views"][0]["cards"][0]["tap_action"]["navigation_path"] == "/lovelace/living-room"
+    grid = dash["views"][0]["cards"][0]
+    assert grid["type"] == "grid"
+    first = grid["cards"][0]
+    assert first["tap_action"]["navigation_path"] == "/lovelace/living-room"
+    assert first["type"] == "custom:button-card"
+    # Device tiles use templates inside room and device views
+    device_tile = dash["views"][1]["cards"][0]["cards"][0]
+    assert device_tile["template"] == "light_tile"
     assert dash["views"][2]["path"] == "living-room"
     assert dash["views"][3]["path"] == "kitchen"
+    assert "light_tile" in dash.get("button_card_templates", {})
 
 
 def test_resources_included():
