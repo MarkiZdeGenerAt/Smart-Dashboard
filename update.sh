@@ -26,6 +26,7 @@ fi
 
 mkdir -p "$TARGET_DIR/dashboards"
 python3 "$COMP_DIR/dashboard.py" "$CONFIG_FILE" --output "$TARGET_DIR/dashboards/smart_dashboard.yaml"
+python3 setup_dashboard.py "$TARGET_DIR"
 
 echo "Update complete."
 rm -rf "$TMP_DIR"
