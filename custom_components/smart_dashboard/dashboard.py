@@ -57,14 +57,28 @@ def _load_all_translations() -> None:
 _load_all_translations()
 
 
-def load_translations(lang: str) -> Dict[str, str]:
-    """Return translation dictionary for *lang*."""
+async def load_translations(lang: str) -> Dict[str, str]:
+    """Return translation dictionary for *lang* using a background thread."""
+    if lang not in _TRANSLATIONS:
+        trans_path = Path(__file__).parent / "translations" / f"{lang}.json"
+        if not trans_path.exists():
+            _TRANSLATIONS[lang] = {}
+        else:
+            def _read() -> Dict[str, str]:
+                with trans_path.open() as f:
+                    return json.load(f)
+
+            try:
+                _TRANSLATIONS[lang] = await asyncio.to_thread(_read)
+            except Exception:  # pragma: no cover - runtime environment
+                _TRANSLATIONS[lang] = {}
     return _TRANSLATIONS.get(lang, {})
 
 
-def t(key: str, lang: str, default: str) -> str:
+async def t(key: str, lang: str, default: str) -> str:
     """Return translated string for ``key`` or ``default`` if missing."""
-    return load_translations(lang).get(key, default)
+    translations = await load_translations(lang)
+    return translations.get(key, default)
 
 
 # Default Jinja2 template used when ``--template`` is not provided.
@@ -207,9 +221,9 @@ def discover_devices(
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
         area_name = (
-            areas.get(area_id, t("auto_detected", lang, "Auto Detected"))
+            areas.get(area_id, asyncio.run(t("auto_detected", lang, "Auto Detected")))
             if areas
-            else t("auto_detected", lang, "Auto Detected")
+            else asyncio.run(t("auto_detected", lang, "Auto Detected"))
         )
         rooms.setdefault(area_name, []).append(
             {"type": card_type, "entity": entity_id}
@@ -260,9 +274,9 @@ async def async_discover_devices_internal(
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
         area_name = (
-            areas.get(area_id, t("auto_detected", lang, "Auto Detected"))
+            areas.get(area_id, await t("auto_detected", lang, "Auto Detected"))
             if areas
-            else t("auto_detected", lang, "Auto Detected")
+            else await t("auto_detected", lang, "Auto Detected")
         )
         rooms.setdefault(area_name, []).append(
             {"type": card_type, "entity": entity_id}
@@ -290,7 +304,7 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             cards = [{"type": f"{layout}-stack", "cards": cards}]
 
         views.append({
-            "title": room.get("name", t("room", lang, "Room")),
+            "title": room.get("name", asyncio.run(t("room", lang, "Room"))),
             "cards": cards,
         })
 
