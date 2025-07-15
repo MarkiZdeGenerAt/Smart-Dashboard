@@ -277,6 +277,8 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         key=lambda r: r.get("order", 0)
     )
     for room in rooms:
+        if room.get("hidden"):
+            continue
         cards = room.get("cards", [])
         layout = room.get("layout")
         if layout in ("horizontal", "vertical"):
