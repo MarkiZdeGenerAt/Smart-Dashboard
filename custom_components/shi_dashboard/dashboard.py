@@ -223,7 +223,11 @@ async def async_discover_devices_internal(
 def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
     """Convert the config into a Lovelace dashboard structure."""
     views = []
-    for room in config.get("rooms", []):
+    rooms = sorted(
+        config.get("rooms", []),
+        key=lambda r: r.get("order", 0)
+    )
+    for room in rooms:
         cards = room.get("cards", [])
         layout = room.get("layout")
         if layout in ("horizontal", "vertical"):
@@ -237,6 +241,8 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
     dashboard = {"views": views}
     if "layout" in config:
         dashboard["layout"] = config["layout"]
+    if "theme" in config:
+        dashboard["theme"] = config["theme"]
     return dashboard
 
 

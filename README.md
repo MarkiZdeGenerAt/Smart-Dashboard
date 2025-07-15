@@ -39,8 +39,8 @@ integration and clicking **Update** when a new release is available.
          filename: dashboards/shi_dashboard.yaml
    ```
 3. Reload Lovelace or restart Home Assistant again to see the new dashboard.
-4. You can edit `shi_dashboard.yaml` at any time to customise the layout and run
-   the generator manually if you wish.
+4. You can edit `shi_dashboard.yaml` at any time to customise the layout,
+   select a theme and run the generator manually if you wish.
 
 ## Requirements
 
@@ -69,7 +69,7 @@ predefined layouts.
 
 Translation files located under `custom_components/shi_dashboard/translations`
 allow the dashboard to be generated in different languages. Set the `SHI_LANG`
-environment variable (e.g. `en` or `fr`) to select the language. If no
+environment variable (e.g. `en`, `ru`, or `bg`) to select the language. If no
 translation is found English is used by default.
 
 ## Example Configuration
@@ -78,7 +78,9 @@ translation is found English is used by default.
 auto_discover: true
 layout:
   strategy: masonry
+theme: default
 ```
 
 With auto discovery enabled the integration will query Home Assistant for all
 entities and group them by their assigned area, similar to Dwains Dashboard.
+Rooms can specify an `order` field to control their position in the dashboard.
