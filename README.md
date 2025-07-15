@@ -1,45 +1,45 @@
-# SHI Dashboard
+# Smart Dashboard
 
-SHI Dashboard is a customizable dashboard add-on for Home Assistant. It allows users to configure rooms and cards using simple YAML without writing code. The provided `dashboard.py` utility converts a user-defined configuration file into a Lovelace dashboard.
+Smart Dashboard is a customizable dashboard add-on for Home Assistant. It allows users to configure rooms and cards using simple YAML without writing code. The provided `dashboard.py` utility converts a user-defined configuration file into a Lovelace dashboard.
 
 ## Installation
 
 The easiest way to install is through HACS:
 1. Add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration" in HACS.
-2. Search for **SHI Dashboard** and install it.
+2. Search for **Smart Dashboard** and install it.
 3. In Home Assistant open **Settings → Devices & Services** and click **Add Integration**.
-   Select **SHI Dashboard** to create the configuration entry.
-4. Restart Home Assistant. This generates `shi_dashboard.yaml` and `dashboards/shi_dashboard.yaml`.
-   The integration files live under `custom_components/shi_dashboard` in your configuration directory.
+   Select **Smart Dashboard** to create the configuration entry.
+4. Restart Home Assistant. This generates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml`.
+   The integration files live under `custom_components/smart_dashboard` in your configuration directory.
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
 ## Updating
 
 Run `update.sh` from the repository to download and install the latest
-version. You can also update through HACS by opening the SHI Dashboard
+version. You can also update through HACS by opening the Smart Dashboard
 integration and clicking **Update** when a new release is available.
 
 ## Getting Started
 
 1. Restart Home Assistant after installing the integration.
-   A default configuration will be created as `shi_dashboard.yaml` and a dashboard
-   generated at `dashboards/shi_dashboard.yaml`.
+   A default configuration will be created as `smart_dashboard.yaml` and a dashboard
+   generated at `dashboards/smart_dashboard.yaml`.
 2. Add the following to your `configuration.yaml` to show the dashboard
    automatically:
 
    ```yaml
    lovelace:
      dashboards:
-       shi-dashboard:
+       smart-dashboard:
          mode: yaml
-         title: SHI Dashboard
+         title: Smart Dashboard
          icon: mdi:monitor-dashboard
          show_in_sidebar: true
-         filename: dashboards/shi_dashboard.yaml
+         filename: dashboards/smart_dashboard.yaml
    ```
 3. Reload Lovelace or restart Home Assistant again to see the new dashboard.
-4. You can edit `shi_dashboard.yaml` at any time to customise the layout,
+4. You can edit `smart_dashboard.yaml` at any time to customise the layout,
    select a theme and run the generator manually if you wish.
 
 ## Requirements
@@ -57,28 +57,39 @@ pip install homeassistant pyyaml jinja2 requests
 
 ## Plugins
 
-Plugins placed in `custom_components/shi_dashboard/plugins` can modify the
+Plugins placed in `custom_components/smart_dashboard/plugins` can modify the
 configuration before the dashboard is generated. Each plugin should define a
 `process_config(config)` function. The provided `header_card` plugin inserts a
 markdown header card into every room.
 
 The `blueprint_loader` plugin loads any YAML files found in
-`custom_components/shi_dashboard/blueprints` and appends them as additional
+`custom_components/smart_dashboard/blueprints` and appends them as additional
 rooms. This mimics the blueprint system in Dwains Dashboard for quickly adding
 predefined layouts.
 
-Translation files located under `custom_components/shi_dashboard/translations`
+Translation files located under `custom_components/smart_dashboard/translations`
 allow the dashboard to be generated in different languages. Set the `SHI_LANG`
-environment variable (e.g. `en`, `ru`, or `bg`) to select the language. If no
+environment variable (e.g. `en`, `ru`, `bg`, or `es`) to select the language. If no
 translation is found English is used by default.
 
 ## Example Configuration
 
 ```yaml
 auto_discover: true
+header:
+  title: "\u0423\u043C\u043D\u044B\u0439 \u0434\u043E\u043C"
+  logo: "/local/icons/home.png"
+  show_time: true
+sidebar:
+  - name: "\u041E\u0431\u0437\u043E\u0440"
+    icon: "mdi:view-dashboard"
+    view: "overview"
+  - name: "\u0421\u0432\u0435\u0442"
+    icon: "mdi:lightbulb"
+    view: "lights"
 layout:
   strategy: masonry
-theme: default
+theme: auto
 ```
 
 With auto discovery enabled the integration will query Home Assistant for all

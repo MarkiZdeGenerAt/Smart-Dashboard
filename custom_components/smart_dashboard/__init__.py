@@ -1,4 +1,4 @@
-"""SHI Dashboard custom integration."""
+"""Smart Dashboard custom integration."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 
 def _create_default_config(hass: HomeAssistant) -> Path:
     """Ensure default configuration exists and return its path."""
-    config_path = Path(hass.config.path("shi_dashboard.yaml"))
+    config_path = Path(hass.config.path("smart_dashboard.yaml"))
     if not config_path.exists():
         example = Path(__file__).parent / "config" / "example_config.yaml"
         try:
@@ -51,7 +51,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up SHI Dashboard from a config entry."""
+    """Set up Smart Dashboard from a config entry."""
     await _generate_dashboard_files(hass)
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = True
     return True

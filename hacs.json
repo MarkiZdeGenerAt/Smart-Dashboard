@@ -1,7 +1,7 @@
 {
-  "name": "SHI Dashboard",
+  "name": "Smart Dashboard",
   "content_in_root": false,
-  "domains": ["shi_dashboard"],
+  "domains": ["smart_dashboard"],
   "homeassistant": "2023.5.0",
   "render_readme": true
 }
