@@ -313,6 +313,20 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             "cards": overview_cards,
         })
 
+    # Device overview showing all cards grouped by type
+    device_cards: List[Dict[str, Any]] = []
+    for room in rooms:
+        if room.get("hidden"):
+            continue
+        device_cards.extend(room.get("cards", []))
+    grouped_devices = _group_cards_by_type(device_cards)
+    if grouped_devices:
+        views.append({
+            "title": asyncio.run(t("devices", lang, "Devices")),
+            "path": "devices",
+            "cards": grouped_devices,
+        })
+
     for room in rooms:
         if room.get("hidden"):
             continue
