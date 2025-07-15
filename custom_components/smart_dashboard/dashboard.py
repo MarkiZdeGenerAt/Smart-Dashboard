@@ -93,6 +93,36 @@ views:
 )
 
 
+_DEVICE_TEMPLATE_MAP = {
+    "light": "light_tile",
+    "climate": "climate_tile",
+    "media_player": "media_tile",
+    "sensor": "sensor_tile",
+    "binary_sensor": "sensor_tile",
+}
+
+
+def _apply_tile_templates(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return cards converted to button-card tiles using templates."""
+    result: List[Dict[str, Any]] = []
+    for card in cards:
+        entity = card.get("entity")
+        domain = entity.split(".")[0] if isinstance(entity, str) else None
+        template = _DEVICE_TEMPLATE_MAP.get(domain)
+        if template:
+            result.append(
+                {
+                    "type": "custom:button-card",
+                    "template": template,
+                    "entity": entity,
+                }
+            )
+        else:
+            result.append(card)
+    return result
+
+
+
 def load_config(path: Path) -> Dict[str, Any]:
     """Load a YAML configuration file."""
     with path.open() as f:
@@ -104,7 +134,8 @@ def load_config(path: Path) -> Dict[str, Any]:
 
 
 def _group_cards_by_type(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Return cards grouped into stacks by device type."""
+    """Return cards grouped into stacks by device type and converted to tiles."""
+    cards = _apply_tile_templates(cards)
     groups = {
         "light": [],
         "climate": [],
@@ -297,9 +328,15 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             continue
         name = room.get("name", asyncio.run(t("room", lang, "Room")))
         path = _slugify(name)
+        icon = room.get("icon", "mdi:home-outline")
+        active_count = sum(
+            1 for card in room.get("cards", []) if isinstance(card, dict) and card.get("entity")
+        )
         overview_cards.append({
-            "type": "button",
+            "type": "custom:button-card",
+            "icon": icon,
             "name": name,
+            "label": f"{active_count} devices",
             "tap_action": {
                 "action": "navigate",
                 "navigation_path": f"/lovelace/{path}",
@@ -310,7 +347,14 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         views.append({
             "title": asyncio.run(t("overview", lang, "Overview")),
             "path": "overview",
-            "cards": overview_cards,
+            "cards": [
+                {
+                    "type": "grid",
+                    "columns": 2,
+                    "square": False,
+                    "cards": overview_cards,
+                }
+            ],
         })
 
     # Device overview showing all cards grouped by type
@@ -330,7 +374,7 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
     for room in rooms:
         if room.get("hidden"):
             continue
-        cards = room.get("cards", [])
+        cards = _apply_tile_templates(room.get("cards", []))
         layout = room.get("layout")
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]
@@ -343,6 +387,18 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         })
 
     dashboard = {"views": views}
+    dashboard["button_card_templates"] = {
+        "device_tile": {
+            "show_icon": True,
+            "show_name": True,
+            "show_state": True,
+            "layout": "vertical",
+        },
+        "light_tile": {"template": "device_tile", "tap_action": {"action": "toggle"}},
+        "climate_tile": {"template": "device_tile"},
+        "sensor_tile": {"template": "device_tile"},
+        "media_tile": {"template": "device_tile"},
+    }
     if "layout" in config:
         dashboard["layout"] = config["layout"]
     if "theme" in config:
