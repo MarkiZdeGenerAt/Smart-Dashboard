@@ -8,6 +8,7 @@ Follow these steps to install the Smart Dashboard custom integration into Home A
 3. Open **Settings → Devices & Services** in Home Assistant and click **Add Integration**.
    Choose **Smart Dashboard** to create the configuration entry.
 4. Restart Home Assistant to activate the integration.
+   Since `manifest.json` enables a `config_flow`, Smart Dashboard appears automatically in the **Add Integration** list.
 
 ## Generate Your First Dashboard
 1. The first start creates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml` automatically.

@@ -1,4 +1,23 @@
 {
   "auto_detected": "Detectado automáticamente",
-  "room": "Habitación"
+  "room": "Habitación",
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "conditions": "Condiciones globales (una por línea)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Smart Dashboard",
+        "data": {
+          "conditions": "Condiciones globales (una por línea)"
+        }
+      }
+    }
+  }
 }
