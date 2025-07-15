@@ -20,6 +20,10 @@ rooms:
     cards:
       - type: light
         entity: light.living_room
+      - type: glance
+        entities:
+          - sensor.temperature
+          - binary_sensor.front_door
   - name: Кухня
     conditions:
       - state('binary_sensor.kitchen_motion') == 'on'
