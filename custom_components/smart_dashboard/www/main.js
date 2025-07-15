@@ -4,6 +4,9 @@ class SmartDashboard {
     this.token = token;
     this.state = [];
     this.interval = null;
+    this.lazyInit = false;
+    this.lazyLoad = false;
+    this.observer = null;
   }
 
   async fetchStates() {
@@ -19,14 +22,45 @@ class SmartDashboard {
     }
   }
 
+  _updateElement(el) {
+    const entity = el.dataset.entityId;
+    const st = this.state.find(s => s.entity_id === entity);
+    if (st) {
+      el.textContent = st.state;
+    }
+  }
+
+  _setupLazy(elements) {
+    if (this.observer) return;
+    this.observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this._updateElement(entry.target);
+        }
+      });
+    }, { rootMargin: '100px' });
+    elements.forEach(el => this.observer.observe(el));
+  }
+
   updateDom() {
-    document.querySelectorAll('[data-entity-id]').forEach(el => {
-      const entity = el.dataset.entityId;
-      const st = this.state.find(s => s.entity_id === entity);
-      if (st) {
-        el.textContent = st.state;
-      }
-    });
+    const elements = document.querySelectorAll('[data-entity-id]');
+    if (!this.lazyInit) {
+      this.lazyLoad = elements.length > 500;
+      this.lazyInit = true;
+    }
+    if (this.lazyLoad) {
+      this._setupLazy(elements);
+      elements.forEach(el => {
+        if (this.observer && el.getBoundingClientRect) {
+          const rect = el.getBoundingClientRect();
+          if (rect.bottom >= 0 && rect.top <= window.innerHeight) {
+            this._updateElement(el);
+          }
+        }
+      });
+    } else {
+      elements.forEach(el => this._updateElement(el));
+    }
   }
 
   evaluateCondition(expr, user = null) {

@@ -150,6 +150,13 @@ Usage inside a dashboard:
 </script>
 ```
 
+## Performance Optimization
+
+When a dashboard contains more than 500 entity placeholders the web client
+automatically switches to lazy loading. Elements are populated only when they
+scroll into view, keeping the initial load time under two seconds even on large
+installations.
+
 ## UI Config Editor
 
 A command line helper `ui_config_editor.py` lets you modify `smart_dashboard.yaml` without manual editing. It can rearrange cards, hide or show rooms and manage sidebar shortcuts used as quick links on the home screen.
