@@ -104,6 +104,10 @@ rooms:
     cards:
       - type: light
         entity: light.living_room
+      - type: glance
+        entities:
+          - sensor.temperature
+          - binary_sensor.front_door
   - name: \u041A\u0443\u0445\u043D\u044F
     conditions:
       - state('binary_sensor.kitchen_motion') == 'on'
@@ -116,6 +120,9 @@ With auto discovery enabled the integration will query Home Assistant for all
 entities and group them by their assigned area, similar to Dwains Dashboard.
 Rooms can specify an `order` field to control their position in the dashboard.
 All options are validated using `voluptuous` to catch mistakes early.
+You can embed any standard Lovelace card by listing its configuration under
+`cards`. For example `type: glance` or `type: light` entries are passed through
+to the generated dashboard unchanged.
 
 ## Web Client
 
