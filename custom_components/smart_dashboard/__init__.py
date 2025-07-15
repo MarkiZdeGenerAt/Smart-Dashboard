@@ -5,7 +5,17 @@ from __future__ import annotations
 import logging
 import shutil
 from pathlib import Path
-import yaml
+try:  # pragma: no cover - optional dependency for tests
+    from homeassistant.util.yaml import load_yaml_dict, save_yaml
+except Exception:  # pragma: no cover - environment without Home Assistant
+    import yaml
+
+    def load_yaml_dict(path: Path) -> dict:
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f) or {}
+
+    def save_yaml(path: str, data: dict) -> None:
+        Path(path).write_text(yaml.safe_dump(data, sort_keys=False))
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
@@ -36,8 +46,7 @@ def _ensure_dashboard_entry(hass: HomeAssistant) -> None:
     data: dict = {}
     if cfg_path.exists():
         try:
-            with cfg_path.open() as f:
-                data = yaml.safe_load(f) or {}
+            data = load_yaml_dict(cfg_path)
         except Exception as err:  # pragma: no cover - runtime environment
             _LOGGER.error("Failed to read %s: %s", cfg_path, err)
             return
@@ -53,7 +62,7 @@ def _ensure_dashboard_entry(hass: HomeAssistant) -> None:
         "filename": "dashboards/smart_dashboard.yaml",
     }
     try:
-        cfg_path.write_text(yaml.safe_dump(data, sort_keys=False))
+        save_yaml(str(cfg_path), data)
         _LOGGER.info("Added Smart Dashboard to %s", cfg_path)
     except Exception as err:  # pragma: no cover - runtime environment
         _LOGGER.error("Failed to update %s: %s", cfg_path, err)
