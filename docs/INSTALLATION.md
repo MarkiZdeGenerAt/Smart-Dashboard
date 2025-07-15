@@ -33,11 +33,11 @@ Follow these steps to install the SHI Dashboard custom integration into Home Ass
 
    Pass `--template <template.j2>` to use a custom Jinja2 template if desired.
 
-   Auto discovery is on by default. When running outside Home Assistant, set
-   `HASS_URL` and `HASS_TOKEN` so the generator can query the API. When executed
-   within Home Assistant it will automatically use its own credentials. Entities
-   are grouped by area when possible; if no areas are available they are placed
-   in a single "Auto Detected" room.
+   Auto discovery is on by default. When running outside Home Assistant **be sure**
+   to set `HASS_URL` and `HASS_TOKEN` so the generator can query the API. When
+   executed within Home Assistant it automatically uses its own credentials.
+   Entities are grouped by area when possible; if no areas are available they are
+   placed in a single "Auto Detected" room.
 
 ## Plugins
 

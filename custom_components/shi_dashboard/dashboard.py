@@ -259,10 +259,6 @@ def generate_dashboard(
     lang = os.environ.get("SHI_LANG", "en")
     config = load_config(config_path)
 
-    # Load and execute any available plugins before building the dashboard
-    load_plugins()
-    run_plugins(config)
-
     if config.get("auto_discover"):
         if hass is not None:
             try:
@@ -271,6 +267,7 @@ def generate_dashboard(
                 )
                 rooms = future.result()
                 config.setdefault("rooms", []).extend(rooms)
+                logger.info("Auto discovered %d rooms", len(rooms))
             except Exception:
                 logger.exception("Device discovery failed")
         else:
@@ -280,13 +277,17 @@ def generate_dashboard(
             token = os.environ.get("HASS_TOKEN")
             if token:
                 try:
-                    config.setdefault("rooms", []).extend(
-                        discover_devices(hass_url, token, lang)
-                    )
+                    rooms = discover_devices(hass_url, token, lang)
+                    config.setdefault("rooms", []).extend(rooms)
+                    logger.info("Auto discovered %d rooms", len(rooms))
                 except Exception:
                     logger.exception("Device discovery failed")
             else:
                 logger.error("auto_discover enabled but HASS_TOKEN is not set")
+
+    # Load and execute any available plugins after building the config
+    load_plugins()
+    run_plugins(config)
 
     if template_path is not None:
         template = load_template(template_path)
