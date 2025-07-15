@@ -20,4 +20,6 @@ def process_config(config: Dict[str, Any]) -> None:
                 rooms.append(data)
         except Exception:  # pragma: no cover - runtime environment
             import logging
-            logging.getLogger(__name__).error("Failed to load blueprint %s", file)
+            logging.getLogger(__name__).error(
+                "Failed to load blueprint %s", file
+            )
