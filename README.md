@@ -26,15 +26,13 @@ integration and clicking **Update** when a new release is available.
 1. Restart Home Assistant after installing the integration.
    A default configuration will be created as `smart_dashboard.yaml` and a dashboard
    generated at `dashboards/smart_dashboard.yaml`.
-2. Run `setup_dashboard.py` to automatically add the dashboard entry to
-   `configuration.yaml`:
+2. The integration adds the dashboard entry to `configuration.yaml`
+   automatically on first start. If you ever need to update it manually run:
 
    ```bash
    python3 setup_dashboard.py /path/to/your/homeassistant
    ```
 
-   The installer script already calls this helper, so no manual editing of
-   `configuration.yaml` is required.
 3. Reload Lovelace or restart Home Assistant again to see the new dashboard.
 4. You can edit `smart_dashboard.yaml` at any time to customise the layout,
    select a theme and run the generator manually if you wish.
