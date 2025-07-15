@@ -14,6 +14,12 @@ The easiest way to install is through HACS:
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 
+## Updating
+
+Run `update.sh` from the repository to download and install the latest
+version. You can also update through HACS by opening the SHI Dashboard
+integration and clicking **Update** when a new release is available.
+
 ## Getting Started
 
 1. Restart Home Assistant after installing the integration.
