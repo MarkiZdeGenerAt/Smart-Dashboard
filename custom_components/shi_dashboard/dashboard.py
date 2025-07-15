@@ -59,7 +59,6 @@ def t(key: str, lang: str, default: str) -> str:
     return load_translations(lang).get(key, default)
 
 
-
 # Default Jinja2 template used when ``--template`` is not provided.
 _DEFAULT_TEMPLATE = Template(
     """
@@ -83,7 +82,9 @@ def load_config(path: Path) -> Dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
-def discover_devices(hass_url: str, token: str, lang: str) -> List[Dict[str, Any]]:
+def discover_devices(
+    hass_url: str, token: str, lang: str
+) -> List[Dict[str, Any]]:
     """Return rooms generated from available Home Assistant devices."""
 
     headers = {"Authorization": f"Bearer {token}"}
@@ -228,7 +229,10 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]
 
-        views.append({"title": room.get("name", t("room", lang, "Room")), "cards": cards})
+        views.append({
+            "title": room.get("name", t("room", lang, "Room")),
+            "cards": cards,
+        })
 
     dashboard = {"views": views}
     if "layout" in config:
