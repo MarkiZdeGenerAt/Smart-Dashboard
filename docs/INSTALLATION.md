@@ -44,7 +44,7 @@ dashboard.
    executed within Home Assistant it automatically uses its own credentials.
 Entities are grouped by area when possible; if no areas are available they are
 placed in a single "Auto Detected" room. Within each area the devices are
-organized into light, climate and multimedia sections to create a cleaner layout.
+organized into light, climate, multimedia and sensor sections to create a cleaner layout.
 
 Set the `SHI_LANG` environment variable (for example `en`, `ru`, `bg`, or `es`) to
 generate the dashboard in a different language.

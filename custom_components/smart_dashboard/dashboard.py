@@ -91,7 +91,13 @@ def load_config(path: Path) -> Dict[str, Any]:
 
 def _group_cards_by_type(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Return cards grouped into stacks by device type."""
-    groups = {"light": [], "climate": [], "multimedia": [], "other": []}
+    groups = {
+        "light": [],
+        "climate": [],
+        "multimedia": [],
+        "sensor": [],
+        "other": [],
+    }
     for card in cards:
         entity = card.get("entity")
         domain = entity.split(".")[0] if isinstance(entity, str) else ""
@@ -101,6 +107,8 @@ def _group_cards_by_type(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             groups["climate"].append(card)
         elif domain == "media_player":
             groups["multimedia"].append(card)
+        elif domain in ("sensor", "binary_sensor"):
+            groups["sensor"].append(card)
         else:
             groups["other"].append(card)
 
@@ -111,6 +119,8 @@ def _group_cards_by_type(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         result.append({"type": "vertical-stack", "cards": groups["climate"]})
     if groups["multimedia"]:
         result.append({"type": "vertical-stack", "cards": groups["multimedia"]})
+    if groups["sensor"]:
+        result.append({"type": "vertical-stack", "cards": groups["sensor"]})
     result.extend(groups["other"])
     return result
 
