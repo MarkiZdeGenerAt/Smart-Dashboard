@@ -116,3 +116,28 @@ With auto discovery enabled the integration will query Home Assistant for all
 entities and group them by their assigned area, similar to Dwains Dashboard.
 Rooms can specify an `order` field to control their position in the dashboard.
 All options are validated using `voluptuous` to catch mistakes early.
+
+## Web Client
+
+A small JavaScript helper is available at `custom_components/smart_dashboard/www/main.js`.
+Include it as a Lovelace resource to enable live updates. The script periodically
+fetches entity states from the Home Assistant REST API and fills any element with
+a `data-entity-id` attribute with the current state.
+
+Example resource declaration:
+
+```yaml
+resources:
+  - url: /local/smart_dashboard/main.js
+    type: module
+```
+
+Usage inside a dashboard:
+
+```html
+<span data-entity-id="sensor.outside_temperature"></span>
+<script>
+  const sd = new window.SmartDashboard('http://homeassistant.local:8123', 'YOUR_LONG_LIVED_TOKEN');
+  sd.start();
+</script>
+```
