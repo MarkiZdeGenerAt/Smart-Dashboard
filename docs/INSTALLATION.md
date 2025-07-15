@@ -1,18 +1,17 @@
 # Installation Guide
 
-This guide explains how to install the SHI Dashboard custom integration into Home Assistant.
+Follow these steps to install the SHI Dashboard custom integration into Home Assistant.
 
-## Installing via HACS
+## Install with HACS
 1. In HACS, add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration".
-2. Search for **SHI Dashboard** in HACS and install it.
-3. In Home Assistant open **Settings → Devices & Services** and click **Add Integration**.
+2. Search for **SHI Dashboard** and install it.
+3. Open **Settings → Devices & Services** in Home Assistant and click **Add Integration**.
    Choose **SHI Dashboard** to create the configuration entry.
 4. Restart Home Assistant to activate the integration.
 
-## Generating a Dashboard
-1. On first start, a default `shi_dashboard.yaml` configuration and
-   `dashboards/shi_dashboard.yaml` dashboard will be created automatically.
-2. Add this to your `configuration.yaml` so the dashboard appears in the sidebar:
+## Generate Your First Dashboard
+1. The first start creates `shi_dashboard.yaml` and `dashboards/shi_dashboard.yaml` automatically.
+2. Add this block to your `configuration.yaml` so the dashboard appears in the sidebar:
 
    ```yaml
    lovelace:
@@ -24,24 +23,26 @@ This guide explains how to install the SHI Dashboard custom integration into Hom
          show_in_sidebar: true
          filename: dashboards/shi_dashboard.yaml
    ```
-3. Reload Lovelace or restart Home Assistant again to see the dashboard.
-3. You can modify `shi_dashboard.yaml` and run the generator manually:
+3. Reload Lovelace or restart Home Assistant to see the dashboard.
+4. To regenerate manually, run:
+
    ```bash
    python3 custom_components/shi_dashboard/dashboard.py shi_dashboard.yaml \
        --output dashboards/shi_dashboard.yaml
    ```
-  Optionally, pass `--template <template.j2>` to use a custom Jinja2 template.
 
-  Auto discovery is enabled by default. If you run the generator outside of Home Assistant,
-  export `HASS_URL` and `HASS_TOKEN` so it can query the API. When executed within Home Assistant
-  the integration will automatically use its own credentials. Discovered entities are grouped by
-  area to mimic Dwains Dashboard. If areas cannot be retrieved they are placed in a single "Auto
-  Detected" room.
+   Pass `--template <template.j2>` to use a custom Jinja2 template if desired.
 
-## Using Plugins
+   Auto discovery is on by default. When running outside Home Assistant, set
+   `HASS_URL` and `HASS_TOKEN` so the generator can query the API. When executed
+   within Home Assistant it will automatically use its own credentials. Entities
+   are grouped by area when possible; if no areas are available they are placed
+   in a single "Auto Detected" room.
 
-Place additional Python modules in `custom_components/shi_dashboard/plugins`.
-Each module should define `process_config(config)` which will be called during
-dashboard generation. See `header_card.py` for a simple example.
+## Plugins
+
+Modules placed in `custom_components/shi_dashboard/plugins` can modify the
+configuration before generation. Each module should define
+`process_config(config)`. See `header_card.py` for an example.
 
 
