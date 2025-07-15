@@ -18,6 +18,10 @@ mkdir -p "$TARGET_DIR/custom_components"
 rm -rf "$COMP_DIR"
 cp -r "$SRC_DIR/custom_components/smart_dashboard" "$COMP_DIR"
 
+# Copy JavaScript UI helpers
+mkdir -p "$TARGET_DIR/www"
+cp "$SRC_DIR/custom_components/smart_dashboard/www/dwains_style.js" "$TARGET_DIR/www/dwains_style.js"
+
 CONFIG_FILE="$TARGET_DIR/smart_dashboard.yaml"
 if [ ! -f "$CONFIG_FILE" ]; then
   cp "$SRC_DIR/custom_components/smart_dashboard/config/example_config.yaml" "$CONFIG_FILE"

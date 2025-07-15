@@ -351,6 +351,8 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         dashboard["header"] = config["header"]
     if "sidebar" in config:
         dashboard["sidebar"] = config["sidebar"]
+    if "resources" in config:
+        dashboard["resources"] = config["resources"]
     return dashboard
 
 

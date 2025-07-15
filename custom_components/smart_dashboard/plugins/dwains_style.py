@@ -30,3 +30,8 @@ def process_config(config: Dict[str, Any]) -> None:
             continue
         sidebar.append({"name": name, "icon": "mdi:chevron-right", "view": view})
         existing.add(view)
+
+    resources = config.setdefault("resources", [])
+    urls = {res.get("url") for res in resources if isinstance(res, dict)}
+    if "/local/dwains_style.js" not in urls:
+        resources.append({"url": "/local/dwains_style.js", "type": "module"})

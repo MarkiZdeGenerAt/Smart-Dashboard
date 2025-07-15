@@ -70,7 +70,10 @@ predefined layouts.
 
 The `dwains_style` plugin creates a Dwains Dashboard inspired navigation bar. It
 automatically adds each room as a sidebar shortcut, enables the clock in the
-header and applies a default `dwains` theme.
+header and applies a default `dwains` theme. It also loads a small JavaScript
+module that draws a live clock in the header so the dashboard feels closer to
+Dwains Dashboard. The script is served from `/local/dwains_style.js` and is
+added automatically to the Lovelace `resources` section.
 
 `lovelace_cards_loader` can import existing Lovelace views by talking to the
 Home Assistant API. Enable it by setting `load_lovelace_cards: true` in your

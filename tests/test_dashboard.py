@@ -19,3 +19,18 @@ def test_overview_generation():
     assert dash["views"][0]["cards"][0]["tap_action"]["navigation_path"] == "/lovelace/living-room"
     assert dash["views"][2]["path"] == "living-room"
     assert dash["views"][3]["path"] == "kitchen"
+
+
+def test_resources_included():
+    cfg = {
+        "resources": [{"url": "/local/test.js", "type": "module"}],
+        "rooms": [],
+    }
+    dash = build_dashboard(cfg, "en")
+    assert dash["resources"][0]["url"] == "/local/test.js"
+
+def test_dwains_plugin_resources():
+    from custom_components.smart_dashboard.plugins.dwains_style import process_config
+    cfg = {"rooms": [{"name": "Room"}]}
+    process_config(cfg)
+    assert any(r.get("url") == "/local/dwains_style.js" for r in cfg.get("resources", []))
