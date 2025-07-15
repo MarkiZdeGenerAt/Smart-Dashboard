@@ -41,20 +41,25 @@ logger = logging.getLogger(__name__)
 _TRANSLATIONS: Dict[str, Dict[str, str]] = {}
 
 
-def load_translations(lang: str) -> Dict[str, str]:
-    """Load translation dictionary for *lang* from the translations folder."""
-    if lang in _TRANSLATIONS:
-        return _TRANSLATIONS[lang]
-    trans_path = Path(__file__).parent / "translations" / f"{lang}.json"
-    if not trans_path.exists():
-        _TRANSLATIONS[lang] = {}
-    else:
+def _load_all_translations() -> None:
+    """Pre-load all translations from the translations folder."""
+    trans_dir = Path(__file__).parent / "translations"
+    for path in trans_dir.glob("*.json"):
+        lang = path.stem
         try:
-            with trans_path.open() as f:
+            with path.open() as f:
                 _TRANSLATIONS[lang] = json.load(f)
         except Exception:  # pragma: no cover - runtime environment
             _TRANSLATIONS[lang] = {}
-    return _TRANSLATIONS[lang]
+
+
+# Load translations at import time to avoid file I/O in the event loop
+_load_all_translations()
+
+
+def load_translations(lang: str) -> Dict[str, str]:
+    """Return translation dictionary for *lang*."""
+    return _TRANSLATIONS.get(lang, {})
 
 
 def t(key: str, lang: str, default: str) -> str:
