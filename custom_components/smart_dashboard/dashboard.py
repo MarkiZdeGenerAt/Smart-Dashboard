@@ -9,6 +9,7 @@ import os
 import asyncio
 import yaml
 import requests
+import voluptuous as vol
 from jinja2 import Template
 import logging
 import sys
@@ -27,8 +28,10 @@ if __name__ == "__main__" and __package__ is None:
 
 try:
     from .plugins import load_plugins, run_plugins
+    from .schema import CONFIG_SCHEMA
 except ImportError:  # pragma: no cover - running as script
     from plugins import load_plugins, run_plugins  # type: ignore
+    from schema import CONFIG_SCHEMA  # type: ignore
 
 
 logger = logging.getLogger(__name__)
@@ -79,7 +82,11 @@ views:
 def load_config(path: Path) -> Dict[str, Any]:
     """Load a YAML configuration file."""
     with path.open() as f:
-        return yaml.safe_load(f) or {}
+        data = yaml.safe_load(f) or {}
+    try:
+        return CONFIG_SCHEMA(data)
+    except vol.Invalid as exc:
+        raise ValueError(f"Invalid configuration: {exc}") from exc
 
 
 def discover_devices(

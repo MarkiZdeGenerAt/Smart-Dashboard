@@ -87,11 +87,25 @@ sidebar:
   - name: "\u0421\u0432\u0435\u0442"
     icon: "mdi:lightbulb"
     view: "lights"
+    condition: user == "admin"
 layout:
   strategy: masonry
 theme: auto
+rooms:
+  - name: \u0413\u043E\u0441\u0442\u0438\u043D\u0430\u044F
+    order: 1
+    cards:
+      - type: light
+        entity: light.living_room
+  - name: \u041A\u0443\u0445\u043D\u044F
+    conditions:
+      - state('binary_sensor.kitchen_motion') == 'on'
+    cards:
+      - type: light
+        entity: light.kitchen
 ```
 
 With auto discovery enabled the integration will query Home Assistant for all
 entities and group them by their assigned area, similar to Dwains Dashboard.
 Rooms can specify an `order` field to control their position in the dashboard.
+All options are validated using `voluptuous` to catch mistakes early.

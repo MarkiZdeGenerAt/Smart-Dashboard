@@ -10,8 +10,19 @@ sidebar:
   - name: "Свет"
     icon: "mdi:lightbulb"
     view: "lights"
+    condition: user == "admin"
 layout:
   strategy: masonry
 theme: auto
-# Devices are grouped by Home Assistant area when auto discovery is enabled.
-# Rooms can specify `order` to control their position in the dashboard.
+rooms:
+  - name: Гостиная
+    order: 1
+    cards:
+      - type: light
+        entity: light.living_room
+  - name: Кухня
+    conditions:
+      - state('binary_sensor.kitchen_motion') == 'on'
+    cards:
+      - type: light
+        entity: light.kitchen
