@@ -67,6 +67,12 @@ The `blueprint_loader` plugin loads any YAML files found in
 rooms. This mimics the blueprint system in Dwains Dashboard for quickly adding
 predefined layouts.
 
+`lovelace_cards_loader` can import existing Lovelace views by talking to the
+Home Assistant API. Enable it by setting `load_lovelace_cards: true` in your
+configuration. The generator will request `/api/lovelace` using the credentials
+provided via the `HASS_URL` and `HASS_TOKEN` environment variables and append
+the returned views as rooms.
+
 Translation files located under `custom_components/smart_dashboard/translations`
 allow the dashboard to be generated in different languages. Set the `SHI_LANG`
 environment variable (e.g. `en`, `ru`, `bg`, or `es`) to select the language. If no
@@ -91,6 +97,7 @@ sidebar:
 layout:
   strategy: masonry
 theme: auto
+load_lovelace_cards: true
 rooms:
   - name: \u0413\u043E\u0441\u0442\u0438\u043D\u0430\u044F
     order: 1
