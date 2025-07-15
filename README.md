@@ -53,7 +53,7 @@ pip install homeassistant pyyaml jinja2 requests
 
 ## Auto Device Detection
 
-`auto_discover` is enabled by default and will query your Home Assistant instance for all registered entities. When the generator runs inside Home Assistant it uses the integration's credentials automatically. If you run the generator manually outside of Home Assistant **you must set the environment variables** `HASS_URL` and `HASS_TOKEN` so it can connect to the API. Discovered entities are grouped by their assigned area when possible; if area information cannot be retrieved everything is placed in a single "Auto Detected" room. Devices within an area are further arranged into stacks of lights, climate controls and multimedia players.
+`auto_discover` is enabled by default and will query your Home Assistant instance for all registered entities. When the generator runs inside Home Assistant it uses the integration's credentials automatically. If you run the generator manually outside of Home Assistant **you must set the environment variables** `HASS_URL` and `HASS_TOKEN` so it can connect to the API. Discovered entities are grouped by their assigned area when possible; if area information cannot be retrieved everything is placed in a single "Auto Detected" room. Devices within an area are further arranged into stacks of lights, climate controls, multimedia players and sensors.
 
 ## Plugins
 

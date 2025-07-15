@@ -20,4 +20,5 @@ def test_grouping():
     assert len(grouped[1]["cards"]) == 1
     assert grouped[2]["type"] == "vertical-stack"
     assert len(grouped[2]["cards"]) == 1
-    assert grouped[3]["type"] == "sensor"
+    assert grouped[3]["type"] == "vertical-stack"
+    assert len(grouped[3]["cards"]) == 1
