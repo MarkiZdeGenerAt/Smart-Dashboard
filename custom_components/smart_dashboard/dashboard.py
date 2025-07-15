@@ -41,20 +41,8 @@ logger = logging.getLogger(__name__)
 _TRANSLATIONS: Dict[str, Dict[str, str]] = {}
 
 
-def _load_all_translations() -> None:
-    """Pre-load all translations from the translations folder."""
-    trans_dir = Path(__file__).parent / "translations"
-    for path in trans_dir.glob("*.json"):
-        lang = path.stem
-        try:
-            with path.open() as f:
-                _TRANSLATIONS[lang] = json.load(f)
-        except Exception:  # pragma: no cover - runtime environment
-            _TRANSLATIONS[lang] = {}
-
-
-# Load translations at import time to avoid file I/O in the event loop
-_load_all_translations()
+# Translations are loaded lazily by ``load_translations`` to avoid blocking I/O
+# during import when the Home Assistant event loop is already running.
 
 
 async def load_translations(lang: str) -> Dict[str, str]:
