@@ -12,18 +12,13 @@ Follow these steps to install the Smart Dashboard custom integration into Home A
 
 ## Generate Your First Dashboard
 1. The first start creates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml` automatically.
-2. Add this block to your `configuration.yaml` so the dashboard appears in the sidebar:
+2. Run `setup_dashboard.py` to insert the dashboard configuration automatically:
 
-   ```yaml
-   lovelace:
-     dashboards:
-       smart-dashboard:
-         mode: yaml
-         title: Smart Dashboard
-         icon: mdi:monitor-dashboard
-         show_in_sidebar: true
-         filename: dashboards/smart_dashboard.yaml
+   ```bash
+   python3 setup_dashboard.py /path/to/your/homeassistant
    ```
+
+   This helper updates `configuration.yaml` for you.
 3. Reload Lovelace or restart Home Assistant to see the dashboard.
 4. To regenerate manually, run:
 
