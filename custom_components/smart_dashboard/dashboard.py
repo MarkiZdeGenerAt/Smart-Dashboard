@@ -69,6 +69,13 @@ async def t(key: str, lang: str, default: str) -> str:
     return translations.get(key, default)
 
 
+def _slugify(text: str) -> str:
+    """Return *text* converted to a URL slug."""
+    slug = "".join(c.lower() if c.isalnum() else "-" for c in text)
+    parts = [p for p in slug.split("-") if p]
+    return "-".join(parts)
+
+
 # Default Jinja2 template used when ``--template`` is not provided.
 _DEFAULT_TEMPLATE = Template(
     """
@@ -283,6 +290,29 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         config.get("rooms", []),
         key=lambda r: r.get("order", 0)
     )
+
+    overview_cards = []
+    for room in rooms:
+        if room.get("hidden"):
+            continue
+        name = room.get("name", asyncio.run(t("room", lang, "Room")))
+        path = _slugify(name)
+        overview_cards.append({
+            "type": "button",
+            "name": name,
+            "tap_action": {
+                "action": "navigate",
+                "navigation_path": f"/lovelace/{path}",
+            },
+        })
+
+    if overview_cards:
+        views.append({
+            "title": asyncio.run(t("overview", lang, "Overview")),
+            "path": "overview",
+            "cards": overview_cards,
+        })
+
     for room in rooms:
         if room.get("hidden"):
             continue
@@ -291,8 +321,10 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]
 
+        name = room.get("name", asyncio.run(t("room", lang, "Room")))
         views.append({
-            "title": room.get("name", asyncio.run(t("room", lang, "Room"))),
+            "title": name,
+            "path": _slugify(name),
             "cards": cards,
         })
 
