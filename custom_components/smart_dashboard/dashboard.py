@@ -1,4 +1,4 @@
-"""Utility to generate a SHI Dashboard Lovelace configuration."""
+"""Utility to generate a Smart Dashboard Lovelace configuration."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from homeassistant.helpers import (
 # Allow running this file directly
 if __name__ == "__main__" and __package__ is None:
     sys.path.append(str(Path(__file__).resolve().parents[1]))
-    __package__ = "shi_dashboard"
+    __package__ = "smart_dashboard"
 
 try:
     from .plugins import load_plugins, run_plugins
@@ -243,6 +243,10 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         dashboard["layout"] = config["layout"]
     if "theme" in config:
         dashboard["theme"] = config["theme"]
+    if "header" in config:
+        dashboard["header"] = config["header"]
+    if "sidebar" in config:
+        dashboard["sidebar"] = config["sidebar"]
     return dashboard
 
 
@@ -311,12 +315,12 @@ def main() -> None:
         format="%(levelname)s:%(name)s:%(message)s",
     )
     parser = argparse.ArgumentParser(
-        description="Generate SHI Dashboard config"
+        description="Generate Smart Dashboard config"
     )
     parser.add_argument(
         "config",
         type=Path,
-        help="Path to shi_dashboard.yaml configuration",
+        help="Path to smart_dashboard.yaml configuration",
     )
     parser.add_argument(
         "--output",

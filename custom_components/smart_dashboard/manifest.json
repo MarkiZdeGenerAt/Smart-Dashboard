@@ -1,0 +1,14 @@
+{
+  "domain": "smart_dashboard",
+  "name": "Smart Dashboard",
+  "documentation": "https://github.com/MarkiZdeGenerAt/Smart-Dashboard",
+  "dependencies": [],
+  "codeowners": ["@MarkiZdeGenerAt"],
+  "version": "0.1.0",
+  "requirements": [
+    "pyyaml==6.0.2",
+    "jinja2==3.1.6",
+    "requests==2.32.4"
+  ],
+  "config_flow": true
+}

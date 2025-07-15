@@ -1,4 +1,4 @@
-"""Plugin system for SHI Dashboard."""
+"""Plugin system for Smart Dashboard."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ def load_plugins() -> None:
     for file in plugins_dir.glob("*.py"):
         if file.stem == "__init__":
             continue
-        module_name = f"shi_dashboard_plugin_{file.stem}"
+        module_name = f"smart_dashboard_plugin_{file.stem}"
         spec = util.spec_from_file_location(module_name, file)
         if spec and spec.loader:
             module = util.module_from_spec(spec)

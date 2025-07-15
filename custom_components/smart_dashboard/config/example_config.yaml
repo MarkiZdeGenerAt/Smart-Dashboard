@@ -1,0 +1,17 @@
+auto_discover: true
+header:
+  title: "Умный дом"
+  logo: "/local/icons/home.png"
+  show_time: true
+sidebar:
+  - name: "Обзор"
+    icon: "mdi:view-dashboard"
+    view: "overview"
+  - name: "Свет"
+    icon: "mdi:lightbulb"
+    view: "lights"
+layout:
+  strategy: masonry
+theme: auto
+# Devices are grouped by Home Assistant area when auto discovery is enabled.
+# Rooms can specify `order` to control their position in the dashboard.
