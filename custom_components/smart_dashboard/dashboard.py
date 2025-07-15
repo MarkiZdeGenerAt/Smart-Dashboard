@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 import argparse
 import os
 import asyncio
@@ -120,6 +120,48 @@ def _apply_tile_templates(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         else:
             result.append(card)
     return result
+
+
+def _get_known_entities(hass: Optional[HomeAssistant]) -> Set[str]:
+    """Return a set of known entity IDs."""
+    if hass is not None:
+        return {state.entity_id for state in hass.states.async_all()}
+
+    token = os.environ.get("HASS_TOKEN")
+    if not token:
+        return set()
+
+    url = os.environ.get("HASS_URL", "http://localhost:8123").rstrip("/")
+    headers = {"Authorization": f"Bearer {token}"}
+    try:
+        resp = requests.get(f"{url}/api/states", headers=headers, timeout=10)
+        resp.raise_for_status()
+        return {
+            item.get("entity_id")
+            for item in resp.json()
+            if item.get("entity_id") is not None
+        }
+    except Exception:  # pragma: no cover - runtime environment
+        logger.warning("Failed to fetch entity list", exc_info=True)
+        return set()
+
+
+def filter_existing_entities(
+    config: Dict[str, Any], hass: Optional[HomeAssistant] = None
+) -> None:
+    """Remove cards referencing missing entities from *config*."""
+    known = _get_known_entities(hass)
+    if not known:
+        return
+    for room in config.get("rooms", []):
+        cards = []
+        for card in room.get("cards", []):
+            if isinstance(card, dict):
+                entity = card.get("entity")
+                if entity and entity not in known:
+                    continue
+            cards.append(card)
+        room["cards"] = cards
 
 
 
@@ -460,6 +502,8 @@ def generate_dashboard(
     # Load and execute any available plugins after building the config
     load_plugins()
     run_plugins(config)
+
+    filter_existing_entities(config, hass)
 
     if template_path is not None:
         template = load_template(template_path)
