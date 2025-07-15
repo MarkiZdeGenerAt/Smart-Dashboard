@@ -38,6 +38,12 @@ CONFIG_SCHEMA = vol.Schema(
         },
         vol.Optional("theme", default="auto"): vol.In(["light", "dark", "auto"]),
         vol.Optional("load_lovelace_cards", default=False): bool,
+        vol.Optional("resources", default=[]): [
+            {
+                vol.Required("url"): str,
+                vol.Required("type"): str,
+            }
+        ],
         vol.Optional("rooms", default=[]): [ROOM_SCHEMA],
     }
 )
