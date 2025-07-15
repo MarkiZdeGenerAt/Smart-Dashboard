@@ -29,6 +29,20 @@ class SmartDashboard {
     });
   }
 
+  evaluateCondition(expr, user = null) {
+    const state = id => {
+      const st = this.state.find(s => s.entity_id === id);
+      return st ? st.state : undefined;
+    };
+    try {
+      const fn = new Function('state', 'user', `"use strict"; return (${expr});`);
+      return Boolean(fn(state, user));
+    } catch (err) {
+      console.error('Failed evaluating condition', expr, err);
+      return false;
+    }
+  }
+
   start(interval = 5000) {
     this.fetchStates();
     this.interval = setInterval(() => this.fetchStates(), interval);
