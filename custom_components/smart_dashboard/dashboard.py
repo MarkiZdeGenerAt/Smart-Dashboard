@@ -164,6 +164,21 @@ def filter_existing_entities(
         room["cards"] = cards
 
 
+def deduplicate_cards(config: Dict[str, Any]) -> None:
+    """Remove duplicate card definitions within each room."""
+    for room in config.get("rooms", []):
+        seen: Set[str] = set()
+        unique: List[Dict[str, Any]] = []
+        for card in room.get("cards", []):
+            if isinstance(card, dict):
+                key = json.dumps(card, sort_keys=True)
+                if key in seen:
+                    continue
+                seen.add(key)
+            unique.append(card)
+        room["cards"] = unique
+
+
 
 def load_config(path: Path) -> Dict[str, Any]:
     """Load a YAML configuration file."""
@@ -271,10 +286,12 @@ def discover_devices(
         pass
 
     rooms: Dict[str, List[Dict[str, Any]]] = {}
+    seen_entities: Set[str] = set()
     for state in states:
         entity_id = state.get("entity_id")
-        if not entity_id:
+        if not entity_id or entity_id in seen_entities:
             continue
+        seen_entities.add(entity_id)
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
@@ -326,8 +343,12 @@ async def async_discover_devices_internal(
     }
 
     rooms: Dict[str, List[Dict[str, Any]]] = {}
+    seen_entities: Set[str] = set()
     for state in states:
         entity_id = state.entity_id
+        if entity_id in seen_entities:
+            continue
+        seen_entities.add(entity_id)
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
@@ -504,6 +525,7 @@ def generate_dashboard(
     run_plugins(config)
 
     filter_existing_entities(config, hass)
+    deduplicate_cards(config)
 
     if template_path is not None:
         template = load_template(template_path)
