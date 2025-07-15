@@ -178,9 +178,9 @@ async def async_discover_devices_internal(
 
     states = hass.states.async_all()
 
-    area_reg = await ar.async_get_registry(hass)
-    device_reg = await dr.async_get_registry(hass)
-    entity_reg = await er.async_get_registry(hass)
+    area_reg = ar.async_get(hass)
+    device_reg = dr.async_get(hass)
+    entity_reg = er.async_get(hass)
 
     areas: Dict[str | None, str] = {
         area.id: area.name for area in area_reg.async_list_areas()
