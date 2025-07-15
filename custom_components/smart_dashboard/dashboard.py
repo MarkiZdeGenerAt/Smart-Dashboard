@@ -89,6 +89,32 @@ def load_config(path: Path) -> Dict[str, Any]:
         raise ValueError(f"Invalid configuration: {exc}") from exc
 
 
+def _group_cards_by_type(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return cards grouped into stacks by device type."""
+    groups = {"light": [], "climate": [], "multimedia": [], "other": []}
+    for card in cards:
+        entity = card.get("entity")
+        domain = entity.split(".")[0] if isinstance(entity, str) else ""
+        if domain == "light":
+            groups["light"].append(card)
+        elif domain == "climate":
+            groups["climate"].append(card)
+        elif domain == "media_player":
+            groups["multimedia"].append(card)
+        else:
+            groups["other"].append(card)
+
+    result: List[Dict[str, Any]] = []
+    if groups["light"]:
+        result.append({"type": "vertical-stack", "cards": groups["light"]})
+    if groups["climate"]:
+        result.append({"type": "vertical-stack", "cards": groups["climate"]})
+    if groups["multimedia"]:
+        result.append({"type": "vertical-stack", "cards": groups["multimedia"]})
+    result.extend(groups["other"])
+    return result
+
+
 def discover_devices(
     hass_url: str, token: str, lang: str
 ) -> List[Dict[str, Any]]:
@@ -174,7 +200,10 @@ def discover_devices(
             {"type": card_type, "entity": entity_id}
         )
 
-    return [{"name": name, "cards": cards} for name, cards in rooms.items()]
+    return [
+        {"name": name, "cards": _group_cards_by_type(cards)}
+        for name, cards in rooms.items()
+    ]
 
 
 async def async_discover_devices_internal(
@@ -224,7 +253,10 @@ async def async_discover_devices_internal(
             {"type": card_type, "entity": entity_id}
         )
 
-    return [{"name": name, "cards": cards} for name, cards in rooms.items()]
+    return [
+        {"name": name, "cards": _group_cards_by_type(cards)}
+        for name, cards in rooms.items()
+    ]
 
 
 def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
