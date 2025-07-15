@@ -68,6 +68,10 @@ The `blueprint_loader` plugin loads any YAML files found in
 rooms. This mimics the blueprint system in Dwains Dashboard for quickly adding
 predefined layouts.
 
+The `dwains_style` plugin creates a Dwains Dashboard inspired navigation bar. It
+automatically adds each room as a sidebar shortcut, enables the clock in the
+header and applies a default `dwains` theme.
+
 `lovelace_cards_loader` can import existing Lovelace views by talking to the
 Home Assistant API. Enable it by setting `load_lovelace_cards: true` in your
 configuration. The generator will request `/api/lovelace` using the credentials
@@ -124,38 +128,6 @@ All options are validated using `voluptuous` to catch mistakes early.
 You can embed any standard Lovelace card by listing its configuration under
 `cards`. For example `type: glance` or `type: light` entries are passed through
 to the generated dashboard unchanged.
-
-## Web Client
-
-A small JavaScript helper is available at `custom_components/smart_dashboard/www/main.js`.
-Include it as a Lovelace resource to enable live updates. The script periodically
-fetches entity states from the Home Assistant REST API and fills any element with
-a `data-entity-id` attribute with the current state.
-
-Example resource declaration:
-
-```yaml
-resources:
-  - url: /local/smart_dashboard/main.js
-    type: module
-```
-
-Usage inside a dashboard:
-
-```html
-<span data-entity-id="sensor.outside_temperature"></span>
-<script>
-  const sd = new window.SmartDashboard('http://homeassistant.local:8123', 'YOUR_LONG_LIVED_TOKEN');
-  sd.start();
-</script>
-```
-
-## Performance Optimization
-
-When a dashboard contains more than 500 entity placeholders the web client
-automatically switches to lazy loading. Elements are populated only when they
-scroll into view, keeping the initial load time under two seconds even on large
-installations.
 
 ## UI Config Editor
 
