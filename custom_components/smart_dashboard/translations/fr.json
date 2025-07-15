@@ -1,4 +1,23 @@
 {
   "auto_detected": "Détecté automatiquement",
-  "room": "Pièce"
+  "room": "Pièce",
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "conditions": "Conditions globales (une par ligne)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Smart Dashboard",
+        "data": {
+          "conditions": "Conditions globales (une par ligne)"
+        }
+      }
+    }
+  }
 }

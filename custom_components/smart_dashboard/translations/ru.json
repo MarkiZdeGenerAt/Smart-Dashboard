@@ -1,4 +1,23 @@
 {
   "auto_detected": "Авто обнаружение",
-  "room": "Комната"
+  "room": "Комната",
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "conditions": "Глобальные условия (по одному на строку)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметры Smart Dashboard",
+        "data": {
+          "conditions": "Глобальные условия (по одному на строку)"
+        }
+      }
+    }
+  }
 }

@@ -11,6 +11,7 @@ The easiest way to install is through HACS:
    Select **Smart Dashboard** to create the configuration entry.
 4. Restart Home Assistant. This generates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml`.
    The integration files live under `custom_components/smart_dashboard` in your configuration directory.
+5. The integration provides a `config_flow` declared in `manifest.json`, so it shows up automatically in the **Add Integration** dialog.
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 

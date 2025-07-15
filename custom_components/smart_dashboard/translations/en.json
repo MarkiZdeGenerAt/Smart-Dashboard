@@ -1,4 +1,23 @@
 {
   "auto_detected": "Auto Detected",
-  "room": "Room"
+  "room": "Room",
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "conditions": "Global conditions (one per line)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Smart Dashboard Options",
+        "data": {
+          "conditions": "Global conditions (one per line)"
+        }
+      }
+    }
+  }
 }
