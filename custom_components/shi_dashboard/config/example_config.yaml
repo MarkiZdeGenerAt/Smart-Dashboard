@@ -1,6 +1,8 @@
 auto_discover: true
 layout:
   strategy: masonry
+theme: default
 
 # No predefined rooms are needed when auto discovery is enabled. Devices will
 # be grouped by their Home Assistant area automatically.
+# Each room can set `order` to control its position.
