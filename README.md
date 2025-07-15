@@ -20,6 +20,12 @@ See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 Run `update.sh` from the repository to download and install the latest
 version. You can also update through HACS by opening the Smart Dashboard
 integration and clicking **Update** when a new release is available.
+The `auto_update.py` helper checks for a new release automatically and
+installs it into your Home Assistant configuration directory:
+
+```bash
+python3 auto_update.py /path/to/your/homeassistant
+```
 
 ## Getting Started
 
