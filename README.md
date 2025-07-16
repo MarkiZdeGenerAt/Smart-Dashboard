@@ -122,7 +122,9 @@ Rooms can specify an `order` field to control their position in the dashboard.
 All options are validated using `voluptuous` to catch mistakes early.
 You can embed any standard Lovelace card by listing its configuration under
 `cards`. For example `type: glance` or `type: light` entries are passed through
-to the generated dashboard unchanged.
+to the generated dashboard unchanged. When a room has no entities a small
+placeholder tile with an icon and "No entities" text is shown so the view is not
+completely empty.
 
 ## UI Config Editor
 
