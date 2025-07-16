@@ -438,6 +438,14 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         if room.get("hidden"):
             continue
         cards = _apply_tile_templates(room.get("cards", []))
+        if not cards:
+            cards = [
+                {
+                    "type": "custom:button-card",
+                    "icon": "mdi:help-circle-outline",
+                    "name": asyncio.run(t("no_entities", lang, "No entities")),
+                }
+            ]
         layout = room.get("layout")
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]

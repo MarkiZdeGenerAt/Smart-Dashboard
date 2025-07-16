@@ -42,3 +42,12 @@ def test_dwains_plugin_resources():
     cfg = {"rooms": [{"name": "Room"}]}
     process_config(cfg)
     assert any(r.get("url") == "/local/dwains_style.js" for r in cfg.get("resources", []))
+
+
+def test_empty_room_placeholder():
+    cfg = {"rooms": [{"name": "Empty", "cards": []}]}
+    dash = build_dashboard(cfg, "en")
+    room_view = dash["views"][1]
+    card = room_view["cards"][0]
+    assert card["icon"] == "mdi:help-circle-outline"
+    assert card["name"] == "No entities"
