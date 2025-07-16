@@ -431,7 +431,14 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         views.append({
             "title": asyncio.run(t("devices", lang, "Devices")),
             "path": "devices",
-            "cards": grouped_devices,
+            "cards": [
+                {
+                    "type": "grid",
+                    "columns": 2,
+                    "square": False,
+                    "cards": grouped_devices,
+                }
+            ],
         })
 
     for room in rooms:
@@ -449,6 +456,15 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         layout = room.get("layout")
         if layout in ("horizontal", "vertical"):
             cards = [{"type": f"{layout}-stack", "cards": cards}]
+        else:
+            cards = [
+                {
+                    "type": "grid",
+                    "columns": 2,
+                    "square": False,
+                    "cards": cards,
+                }
+            ]
 
         name = room.get("name", asyncio.run(t("room", lang, "Room")))
         views.append({
@@ -464,6 +480,13 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             "show_name": True,
             "show_state": True,
             "layout": "vertical",
+            "styles": {
+                "card": [
+                    "padding: 8px",
+                    "background: var(--ha-card-background, rgba(0,0,0,0.05))",
+                    "border-radius: 12px",
+                ]
+            },
         },
         "light_tile": {"template": "device_tile", "tap_action": {"action": "toggle"}},
         "climate_tile": {"template": "device_tile"},
