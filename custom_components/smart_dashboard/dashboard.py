@@ -395,16 +395,32 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         active_count = sum(
             1 for card in room.get("cards", []) if isinstance(card, dict) and card.get("entity")
         )
-        overview_cards.append({
-            "type": "custom:button-card",
-            "icon": icon,
-            "name": name,
-            "label": f"{active_count} devices",
-            "tap_action": {
-                "action": "navigate",
-                "navigation_path": f"/lovelace/{path}",
-            },
-        })
+        tile_cards = _apply_tile_templates(room.get("cards", []))[:4]
+        stack = {
+            "type": "vertical-stack",
+            "cards": [
+                {
+                    "type": "custom:button-card",
+                    "icon": icon,
+                    "name": name,
+                    "label": f"{active_count} devices",
+                    "tap_action": {
+                        "action": "navigate",
+                        "navigation_path": f"/lovelace/{path}",
+                    },
+                }
+            ],
+        }
+        if tile_cards:
+            stack["cards"].append(
+                {
+                    "type": "grid",
+                    "columns": 2,
+                    "square": False,
+                    "cards": tile_cards,
+                }
+            )
+        overview_cards.append(stack)
 
     if overview_cards:
         views.append({

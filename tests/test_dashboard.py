@@ -18,9 +18,14 @@ def test_overview_generation():
     assert dash["views"][1]["title"] == "Devices"
     grid = dash["views"][0]["cards"][0]
     assert grid["type"] == "grid"
-    first = grid["cards"][0]
-    assert first["tap_action"]["navigation_path"] == "/lovelace/living-room"
-    assert first["type"] == "custom:button-card"
+    stack = grid["cards"][0]
+    assert stack["type"] == "vertical-stack"
+    btn = stack["cards"][0]
+    assert btn["tap_action"]["navigation_path"] == "/lovelace/living-room"
+    assert btn["type"] == "custom:button-card"
+    # Next card shows device tiles
+    grid_inside = stack["cards"][1]
+    assert grid_inside["type"] == "grid"
     # Devices view is a grid of stacks
     device_grid = dash["views"][1]["cards"][0]
     assert device_grid["type"] == "grid"
