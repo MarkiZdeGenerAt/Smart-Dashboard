@@ -102,22 +102,6 @@ layout:
   strategy: masonry
 theme: auto
 load_lovelace_cards: true
-rooms:
-  - name: \u0413\u043E\u0441\u0442\u0438\u043D\u0430\u044F
-    order: 1
-    cards:
-      - type: light
-        entity: light.living_room
-      - type: glance
-        entities:
-          - sensor.temperature
-          - binary_sensor.front_door
-  - name: \u041A\u0443\u0445\u043D\u044F
-    conditions:
-      - state('binary_sensor.kitchen_motion') == 'on'
-    cards:
-      - type: light
-        entity: light.kitchen
 ```
 
 With auto discovery enabled the integration will query Home Assistant for all
