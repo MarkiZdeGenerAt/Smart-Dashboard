@@ -21,8 +21,10 @@ def test_overview_generation():
     first = grid["cards"][0]
     assert first["tap_action"]["navigation_path"] == "/lovelace/living-room"
     assert first["type"] == "custom:button-card"
-    # Device tiles use templates inside room and device views
-    device_tile = dash["views"][1]["cards"][0]["cards"][0]
+    # Devices view is a grid of stacks
+    device_grid = dash["views"][1]["cards"][0]
+    assert device_grid["type"] == "grid"
+    device_tile = device_grid["cards"][0]["cards"][0]
     assert device_tile["template"] == "light_tile"
     assert dash["views"][2]["path"] == "living-room"
     assert dash["views"][3]["path"] == "kitchen"
@@ -48,6 +50,6 @@ def test_empty_room_placeholder():
     cfg = {"rooms": [{"name": "Empty", "cards": []}]}
     dash = build_dashboard(cfg, "en")
     room_view = dash["views"][1]
-    card = room_view["cards"][0]
+    card = room_view["cards"][0]["cards"][0]
     assert card["icon"] == "mdi:help-circle-outline"
     assert card["name"] == "No entities"

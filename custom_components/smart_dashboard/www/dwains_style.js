@@ -5,7 +5,18 @@ class DwainsStyle {
       if (header) {
         this.addClock(header);
       }
+      this.addStyles();
     });
+  }
+
+  addStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      hui-grid-card {
+        gap: 8px !important;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   addClock(header) {
