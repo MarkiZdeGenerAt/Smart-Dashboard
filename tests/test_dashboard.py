@@ -58,3 +58,41 @@ def test_empty_room_placeholder():
     card = room_view["cards"][0]["cards"][0]
     assert card["icon"] == "mdi:help-circle-outline"
     assert card["name"] == "No entities"
+
+
+def test_overview_limit_global():
+    cfg = {
+        "overview_limit": 1,
+        "rooms": [
+            {
+                "name": "Room",
+                "cards": [
+                    {"type": "light", "entity": "light.a"},
+                    {"type": "light", "entity": "light.b"},
+                ],
+            }
+        ],
+    }
+    dash = build_dashboard(cfg, "en")
+    inner = dash["views"][0]["cards"][0]["cards"][0]["cards"][1]
+    assert len(inner["cards"]) == 1
+
+
+def test_overview_limit_room_override():
+    cfg = {
+        "overview_limit": 1,
+        "rooms": [
+            {
+                "name": "Room",
+                "overview_limit": 2,
+                "cards": [
+                    {"type": "light", "entity": "light.a"},
+                    {"type": "light", "entity": "light.b"},
+                    {"type": "light", "entity": "light.c"},
+                ],
+            }
+        ],
+    }
+    dash = build_dashboard(cfg, "en")
+    inner = dash["views"][0]["cards"][0]["cards"][0]["cards"][1]
+    assert len(inner["cards"]) == 2
