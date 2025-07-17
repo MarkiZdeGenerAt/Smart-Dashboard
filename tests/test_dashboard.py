@@ -96,3 +96,12 @@ def test_overview_limit_room_override():
     dash = build_dashboard(cfg, "en")
     inner = dash["views"][0]["cards"][0]["cards"][0]["cards"][1]
     assert len(inner["cards"]) == 2
+
+
+def test_fallback_view_when_empty():
+    cfg = {"rooms": []}
+    dash = build_dashboard(cfg, "en")
+    assert dash["views"][0]["title"] == "Smart Dashboard"
+    card = dash["views"][0]["cards"][0]
+    assert card["type"] == "markdown"
+    assert card["content"] == "No devices found."

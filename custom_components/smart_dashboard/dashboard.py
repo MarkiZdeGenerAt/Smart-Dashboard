@@ -536,6 +536,17 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             "cards": cards,
         })
 
+    if not views:
+        views.append({
+            "title": asyncio.run(t("dashboard_title", lang, "Smart Dashboard")),
+            "cards": [
+                {
+                    "type": "markdown",
+                    "content": asyncio.run(t("no_devices_found", lang, "No devices found.")),
+                }
+            ],
+        })
+
     dashboard = {"views": views}
     dashboard["button_card_templates"] = {
         "device_tile": {
