@@ -129,6 +129,7 @@ def _get_known_entities(hass: Optional[HomeAssistant]) -> Set[str]:
 
     token = os.environ.get("HASS_TOKEN")
     if not token:
+        logger.warning("HASS_TOKEN not set; cannot fetch entity list")
         return set()
 
     url = os.environ.get("HASS_URL", "http://localhost:8123").rstrip("/")
@@ -152,6 +153,7 @@ def filter_existing_entities(
     """Remove cards referencing missing entities from *config*."""
     known = _get_known_entities(hass)
     if not known:
+        logger.warning("Entity list empty; skipping entity filtering")
         return
     for room in config.get("rooms", []):
         cards = []
@@ -540,6 +542,13 @@ def generate_dashboard(
 
     lang = os.environ.get("SHI_LANG", "en")
     config = load_config(config_path)
+
+    # Disable auto discovery if we cannot fetch entities from the API
+    if config.get("auto_discover") and not _get_known_entities(hass):
+        logger.warning(
+            "auto_discover disabled because entity list could not be retrieved"
+        )
+        config["auto_discover"] = False
 
     if config.get("auto_discover"):
         if hass is not None:
