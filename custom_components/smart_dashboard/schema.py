@@ -22,7 +22,7 @@ ROOM_SCHEMA = vol.Schema(
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        vol.Optional("auto_discover", default=False): bool,
+        vol.Optional("auto_discover", default=True): bool,
         vol.Optional("header"): {
             vol.Required("title"): str,
             vol.Optional("logo"): str,
