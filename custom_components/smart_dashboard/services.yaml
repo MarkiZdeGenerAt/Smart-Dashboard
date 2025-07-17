@@ -1,0 +1,5 @@
+# Service descriptions for Smart Dashboard integration
+generate:
+  name: Generate Dashboard
+  description: Rebuild the Smart Dashboard files based on the current configuration.
+
