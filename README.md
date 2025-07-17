@@ -70,9 +70,10 @@ module that draws a live clock in the header so the dashboard feels closer to
 Dwains Dashboard. The script is served from `/local/dwains_style.js` and is
 added automatically to the Lovelace `resources` section.
 
-Rooms are displayed using the Lovelace grid card with two columns. Individual
-devices appear as button-card tiles that feature a subtle background and rounded
-corners to better match the Dwains Dashboard style.
+Rooms are displayed using the Lovelace grid card with two columns by default.
+You can change the number of columns for each room using the ``columns``
+option. Individual devices appear as button-card tiles that feature a subtle
+background and rounded corners to better match the Dwains Dashboard style.
 
 `lovelace_cards_loader` can import existing Lovelace views by talking to the
 Home Assistant API. Enable it by setting `load_lovelace_cards: true` in your

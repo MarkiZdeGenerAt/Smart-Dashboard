@@ -1,5 +1,5 @@
 import voluptuous as vol
-from .const import DEFAULT_OVERVIEW_LIMIT
+from .const import DEFAULT_OVERVIEW_LIMIT, DEFAULT_GRID_COLUMNS
 
 # Card schema allows arbitrary keys so users can pass any card options
 CARD_SCHEMA = vol.Schema(
@@ -12,6 +12,9 @@ ROOM_SCHEMA = vol.Schema(
         vol.Optional("icon"): str,
         vol.Optional("order"): vol.Coerce(int),
         vol.Optional("layout"): vol.In(["horizontal", "vertical"]),
+        vol.Optional("columns", default=DEFAULT_GRID_COLUMNS): vol.All(
+            vol.Coerce(int), vol.Range(min=1)
+        ),
         vol.Optional("overview_limit"): vol.All(vol.Coerce(int), vol.Range(min=0)),
         vol.Optional("cards", default=[]): [CARD_SCHEMA],
         vol.Optional("conditions"): [str],
