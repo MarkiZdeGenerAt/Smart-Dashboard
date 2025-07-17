@@ -147,10 +147,10 @@ def discover_devices(hass_url: str, token: str, lang: str) -> List[Dict[str, Any
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
-            "switch": "entity",
+            "switch": "light",
             "climate": "thermostat",
             "sensor": "sensor",
-            "cover": "entity",
+            "cover": "cover",
             "media_player": "media-control",
             "binary_sensor": "sensor",
         }.get(domain, "entity")
@@ -201,10 +201,10 @@ async def async_discover_devices_internal(
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
-            "switch": "entity",
+            "switch": "light",
             "climate": "thermostat",
             "sensor": "sensor",
-            "cover": "entity",
+            "cover": "cover",
             "media_player": "media-control",
             "binary_sensor": "sensor",
         }.get(domain, "entity")

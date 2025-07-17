@@ -34,8 +34,8 @@ class FakeResp:
 
 def test_unknown_types_use_entity(monkeypatch):
     states = [
-        {"entity_id": "switch.a"},
-        {"entity_id": "cover.b"},
+        {"entity_id": "vacuum.a"},
+        {"entity_id": "device_tracker.b"},
     ]
 
     def fake_get(url, headers=None, timeout=10):
