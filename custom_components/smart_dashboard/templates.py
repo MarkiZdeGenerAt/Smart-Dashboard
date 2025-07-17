@@ -22,7 +22,9 @@ views:
 
 DEVICE_TEMPLATE_MAP = {
     "light": "light_tile",
+    "switch": "switch_tile",
     "climate": "climate_tile",
+    "cover": "cover_tile",
     "media_player": "media_tile",
     "sensor": "sensor_tile",
     "binary_sensor": "sensor_tile",
@@ -43,6 +45,8 @@ BUTTON_CARD_TEMPLATES: Dict[str, Dict[str, Any]] = {
         },
     },
     "light_tile": {"template": "device_tile", "tap_action": {"action": "toggle"}},
+    "switch_tile": {"template": "device_tile", "tap_action": {"action": "toggle"}},
+    "cover_tile": {"template": "device_tile", "tap_action": {"action": "toggle"}},
     "climate_tile": {"template": "device_tile"},
     "sensor_tile": {"template": "device_tile"},
     "media_tile": {"template": "device_tile"},
