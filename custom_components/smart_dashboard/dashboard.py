@@ -297,10 +297,10 @@ def discover_devices(
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
-            "switch": "switch",
+            "switch": "entity",
             "climate": "thermostat",
             "sensor": "sensor",
-            "cover": "cover",
+            "cover": "entity",
             "media_player": "media-control",
             "binary_sensor": "sensor",
         }.get(domain, "entity")
@@ -354,10 +354,10 @@ async def async_discover_devices_internal(
         domain = entity_id.split(".")[0]
         card_type = {
             "light": "light",
-            "switch": "switch",
+            "switch": "entity",
             "climate": "thermostat",
             "sensor": "sensor",
-            "cover": "cover",
+            "cover": "entity",
             "media_player": "media-control",
             "binary_sensor": "sensor",
         }.get(domain, "entity")
