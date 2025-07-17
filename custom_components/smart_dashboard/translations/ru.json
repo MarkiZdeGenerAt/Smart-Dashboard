@@ -23,5 +23,7 @@
       }
     }
   },
-  "no_entities": "Нет сущностей"
+  "no_entities": "Нет сущностей",
+  "dashboard_title": "Smart Dashboard",
+  "no_devices_found": "Устройства не найдены"
 }

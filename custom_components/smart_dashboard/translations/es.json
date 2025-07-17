@@ -23,5 +23,7 @@
       }
     }
   },
-  "no_entities": "Sin entidades"
+  "no_entities": "Sin entidades",
+  "dashboard_title": "Smart Dashboard",
+  "no_devices_found": "No se encontraron dispositivos"
 }

@@ -23,5 +23,7 @@
       }
     }
   },
-  "no_entities": "Aucune entité"
+  "no_entities": "Aucune entité",
+  "dashboard_title": "Smart Dashboard",
+  "no_devices_found": "Aucun appareil trouvé"
 }
