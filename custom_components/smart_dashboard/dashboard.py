@@ -445,7 +445,9 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
                     "type": "custom:button-card",
                     "icon": icon,
                     "name": name,
-                    "label": f"{active_count} devices",
+                    "label": asyncio.run(
+                        t("device_count", lang, "{count} devices")
+                    ).format(count=active_count),
                     "tap_action": {
                         "action": "navigate",
                         "navigation_path": f"/lovelace/{path}",

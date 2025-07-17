@@ -1,6 +1,9 @@
 {
   "auto_detected": "Détecté automatiquement",
   "room": "Pièce",
+  "overview": "Vue d'ensemble",
+  "devices": "Appareils",
+  "device_count": "{count} appareils",
   "config": {
     "step": {
       "user": {
