@@ -181,6 +181,46 @@ def deduplicate_cards(config: Dict[str, Any]) -> None:
         room["cards"] = unique
 
 
+def _build_condition_context() -> Dict[str, Any]:
+    """Return evaluation context populated with environment variables."""
+    ctx: Dict[str, Any] = dict(os.environ)
+    user = ctx.get("DASHBOARD_USER") or ctx.get("SD_USER") or ctx.get("USER")
+    if user is not None:
+        ctx.setdefault("user", user)
+    return ctx
+
+
+def _eval_condition(expr: str, ctx: Dict[str, Any]) -> bool:
+    """Safely evaluate a condition expression using *ctx*."""
+    try:
+        return bool(eval(expr, {"__builtins__": {}}, ctx))
+    except Exception:
+        logger.error("Failed to evaluate condition '%s'", expr)
+        return False
+
+
+def apply_conditions(config: Dict[str, Any]) -> None:
+    """Remove rooms and sidebar items whose conditions evaluate to False."""
+    ctx = _build_condition_context()
+
+    if "rooms" in config:
+        filtered_rooms = []
+        for room in config["rooms"]:
+            conds = room.get("conditions") or []
+            if all(_eval_condition(c, ctx) for c in conds):
+                filtered_rooms.append(room)
+        config["rooms"] = filtered_rooms
+
+    if "sidebar" in config:
+        filtered_sidebar = []
+        for item in config["sidebar"]:
+            cond = item.get("condition")
+            if cond is None or _eval_condition(cond, ctx):
+                item.pop("condition", None)
+                filtered_sidebar.append(item)
+        config["sidebar"] = filtered_sidebar
+
+
 
 def load_config(path: Path) -> Dict[str, Any]:
     """Load a YAML configuration file."""
@@ -579,6 +619,8 @@ def generate_dashboard(
     # Load and execute any available plugins after building the config
     load_plugins()
     run_plugins(config)
+
+    apply_conditions(config)
 
     filter_existing_entities(config, hass)
     deduplicate_cards(config)
