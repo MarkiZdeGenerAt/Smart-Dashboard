@@ -22,7 +22,7 @@ from homeassistant.config_entries import ConfigEntry
 
 from .const import DOMAIN, DASHBOARD_DIR, DASHBOARD_FILE
 
-from .dashboard import generate_dashboard
+from .generator import generate_dashboard
 
 _LOGGER = logging.getLogger(__name__)
 
