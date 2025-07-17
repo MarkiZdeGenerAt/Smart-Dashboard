@@ -12,6 +12,14 @@ The easiest way to install is through HACS:
 4. Restart Home Assistant. This generates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml`.
    The integration files live under `custom_components/smart_dashboard` in your configuration directory.
 5. The integration provides a `config_flow` declared in `manifest.json`, so it shows up automatically in the **Add Integration** dialog.
+6. Install the [Button Card](https://github.com/custom-cards/button-card) custom card in HACS and add the resource:
+
+   ```yaml
+   url: /hacsfiles/button-card/button-card.js
+   type: module
+   ```
+
+   Without this card the generated dashboard will not display device tiles correctly.
 
 See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for more details.
 

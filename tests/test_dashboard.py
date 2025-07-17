@@ -43,6 +43,12 @@ def test_resources_included():
     }
     dash = build_dashboard(cfg, "en")
     assert dash["resources"][0]["url"] == "/local/test.js"
+    assert any(r.get("url") == "/hacsfiles/button-card/button-card.js" for r in dash["resources"])
+
+
+def test_button_card_resource_added():
+    dash = build_dashboard({"rooms": []}, "en")
+    assert any(r.get("url") == "/hacsfiles/button-card/button-card.js" for r in dash.get("resources", []))
 
 def test_dwains_plugin_resources():
     from custom_components.smart_dashboard.plugins.dwains_style import process_config
