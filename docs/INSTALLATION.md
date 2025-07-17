@@ -9,6 +9,14 @@ Follow these steps to install the Smart Dashboard custom integration into Home A
    Choose **Smart Dashboard** to create the configuration entry.
 4. Restart Home Assistant to activate the integration.
    Since `manifest.json` enables a `config_flow`, Smart Dashboard appears automatically in the **Add Integration** list.
+5. Install the [Button Card](https://github.com/custom-cards/button-card) custom card in HACS and add the resource entry:
+
+   ```yaml
+   url: /hacsfiles/button-card/button-card.js
+   type: module
+   ```
+
+   This resource is required for the dashboard tiles to render correctly.
 
 ## Generate Your First Dashboard
 1. The first start creates `smart_dashboard.yaml` and `dashboards/smart_dashboard.yaml` automatically.

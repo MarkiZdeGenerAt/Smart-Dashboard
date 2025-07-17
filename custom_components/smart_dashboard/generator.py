@@ -259,8 +259,13 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         dashboard["header"] = config["header"]
     if "sidebar" in config:
         dashboard["sidebar"] = config["sidebar"]
-    if "resources" in config:
-        dashboard["resources"] = config["resources"]
+
+    resources = list(config.get("resources", []))
+    urls = {res.get("url") for res in resources if isinstance(res, dict)}
+    if "/hacsfiles/button-card/button-card.js" not in urls:
+        resources.append({"url": "/hacsfiles/button-card/button-card.js", "type": "module"})
+    if resources:
+        dashboard["resources"] = resources
     return dashboard
 
 
