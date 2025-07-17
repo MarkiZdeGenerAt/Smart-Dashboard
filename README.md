@@ -83,6 +83,13 @@ allow the dashboard to be generated in different languages. Set the `SHI_LANG`
 environment variable (e.g. `en`, `ru`, `bg`, or `es`) to select the language. If no
 translation is found English is used by default.
 
+Rooms and sidebar shortcuts can specify `conditions` (or `condition` for a single
+expression) that are evaluated when the dashboard is generated. Each expression
+is a small Python snippet executed with all environment variables available in
+the context. A convenient `user` variable is populated from `DASHBOARD_USER`,
+`SD_USER` or the shell `USER` variable. Items are skipped when their condition
+evaluates to `False`.
+
 ## Example Configuration
 
 ```yaml
