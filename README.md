@@ -5,7 +5,7 @@ Smart Dashboard is a customizable dashboard add-on for Home Assistant. It allows
 ## Installation
 
 The easiest way to install is through HACS:
-1. Add `https://github.com/user/Smart-Dashboard` as a custom repository of type "integration" in HACS.
+1. Add `https://github.com/MarkiZdeGenerAt/Smart-Dashboard` as a custom repository of type "integration" in HACS.
 2. Search for **Smart Dashboard** and install it.
 3. In Home Assistant open **Settings → Devices & Services** and click **Add Integration**.
    Select **Smart Dashboard** to create the configuration entry.

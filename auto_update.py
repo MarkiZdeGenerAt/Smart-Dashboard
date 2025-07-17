@@ -15,7 +15,7 @@ from typing import Tuple
 
 import requests
 
-REPO_URL = "https://github.com/user/Smart-Dashboard"
+REPO_URL = "https://github.com/MarkiZdeGenerAt/Smart-Dashboard"
 ARCHIVE_URL = f"{REPO_URL}/archive/refs/heads/main.tar.gz"
 MANIFEST_URL = (
     f"{REPO_URL}/raw/main/custom_components/smart_dashboard/manifest.json"
