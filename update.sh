@@ -2,7 +2,7 @@
 # Update script for the Smart Dashboard custom integration.
 set -euo pipefail
 
-REPO_URL="https://github.com/user/Smart-Dashboard"
+REPO_URL="https://github.com/MarkiZdeGenerAt/Smart-Dashboard"
 ARCHIVE_URL="$REPO_URL/archive/refs/heads/main.tar.gz"
 
 TARGET_DIR="${1:-$HOME/.homeassistant}"
