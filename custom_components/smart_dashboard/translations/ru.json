@@ -1,6 +1,9 @@
 {
   "auto_detected": "Авто обнаружение",
   "room": "Комната",
+  "overview": "Обзор",
+  "devices": "Устройства",
+  "device_count": "{count} устройств",
   "config": {
     "step": {
       "user": {

@@ -1,6 +1,9 @@
 {
   "auto_detected": "Auto Detected",
   "room": "Room",
+  "overview": "Overview",
+  "devices": "Devices",
+  "device_count": "{count} devices",
   "config": {
     "step": {
       "user": {

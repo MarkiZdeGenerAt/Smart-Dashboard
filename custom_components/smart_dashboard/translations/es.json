@@ -1,6 +1,9 @@
 {
   "auto_detected": "Detectado automáticamente",
   "room": "Habitación",
+  "overview": "Resumen",
+  "devices": "Dispositivos",
+  "device_count": "{count} dispositivos",
   "config": {
     "step": {
       "user": {
