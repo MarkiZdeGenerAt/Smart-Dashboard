@@ -12,7 +12,7 @@ import yaml
 import voluptuous as vol
 from homeassistant.core import HomeAssistant
 
-from .const import DEFAULT_OVERVIEW_LIMIT
+from .const import DEFAULT_OVERVIEW_LIMIT, DEFAULT_GRID_COLUMNS
 from .plugins import load_plugins, run_plugins
 from .schema import CONFIG_SCHEMA
 from .templates import (
@@ -164,7 +164,7 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             stack["cards"].append(
                 {
                     "type": "grid",
-                    "columns": 2,
+                    "columns": int(room.get("columns", DEFAULT_GRID_COLUMNS)),
                     "square": False,
                     "cards": tile_cards,
                 }
@@ -225,7 +225,7 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
             cards = [
                 {
                     "type": "grid",
-                    "columns": 2,
+                    "columns": int(room.get("columns", DEFAULT_GRID_COLUMNS)),
                     "square": False,
                     "cards": cards,
                 }

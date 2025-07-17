@@ -105,3 +105,23 @@ def test_fallback_view_when_empty():
     card = dash["views"][0]["cards"][0]
     assert card["type"] == "markdown"
     assert card["content"] == "No devices found."
+
+
+def test_room_columns_override():
+    cfg = {
+        "rooms": [
+            {
+                "name": "Room",
+                "columns": 3,
+                "cards": [{"type": "light", "entity": "light.l1"}],
+            }
+        ]
+    }
+    dash = build_dashboard(cfg, "en")
+    # Grid in the overview view uses the same column count
+    inner = dash["views"][0]["cards"][0]["cards"][0]["cards"][1]
+    assert inner["columns"] == 3
+    # Room view grid also respects the columns option
+    room_view = dash["views"][2]
+    grid = room_view["cards"][0]
+    assert grid["columns"] == 3
