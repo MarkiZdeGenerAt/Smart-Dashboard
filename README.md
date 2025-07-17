@@ -50,6 +50,8 @@ python3 auto_update.py /path/to/your/homeassistant
 3. Reload Lovelace or restart Home Assistant again to see the new dashboard.
 4. You can edit `smart_dashboard.yaml` at any time to customise the layout,
    select a theme and run the generator manually if you wish.
+5. Call the `smart_dashboard.generate` service to rebuild the dashboard
+   without restarting Home Assistant.
 
 ## Requirements
 

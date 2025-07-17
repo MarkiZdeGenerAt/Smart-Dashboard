@@ -94,12 +94,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Smart Dashboard from a config entry."""
     await _generate_dashboard_files(hass)
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = True
+
+    if not hass.services.has_service(DOMAIN, "generate"):
+        async def handle_generate(call) -> None:
+            await _generate_dashboard_files(hass)
+
+        hass.services.async_register(DOMAIN, "generate", handle_generate)
+
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     hass.data.get(DOMAIN, {}).pop(entry.entry_id, None)
+    if not hass.data.get(DOMAIN):
+        hass.services.async_remove(DOMAIN, "generate")
     return True
 
 
