@@ -30,9 +30,11 @@ Follow these steps to install the Smart Dashboard custom integration into Home A
 4. To regenerate manually, run:
 
    ```bash
- python3 custom_components/smart_dashboard/dashboard.py smart_dashboard.yaml \
+  python3 custom_components/smart_dashboard/dashboard.py smart_dashboard.yaml \
       --output dashboards/smart_dashboard.yaml
   ```
+   Or call the `smart_dashboard.generate` service in Home Assistant to
+   rebuild the dashboard without restarting.
 
 You can also define a Lovelace theme by adding `theme: <name>` to
 `smart_dashboard.yaml`.
