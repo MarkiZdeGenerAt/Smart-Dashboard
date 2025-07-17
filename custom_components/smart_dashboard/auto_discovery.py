@@ -18,6 +18,18 @@ from .templates import apply_tile_templates
 
 logger = logging.getLogger(__name__)
 
+# Mapping from entity domain to default Lovelace card type.  Used by both
+# internal and external discovery to ensure consistent behavior.
+DOMAIN_CARD_TYPE: Dict[str, str] = {
+    "light": "light",
+    "switch": "light",
+    "climate": "thermostat",
+    "sensor": "sensor",
+    "cover": "cover",
+    "media_player": "media-control",
+    "binary_sensor": "sensor",
+}
+
 
 def _get_known_entities(hass: Optional[HomeAssistant]) -> Set[str]:
     """Return a set of known entity IDs."""
@@ -145,15 +157,7 @@ def discover_devices(hass_url: str, token: str, lang: str) -> List[Dict[str, Any
             continue
         seen_entities.add(entity_id)
         domain = entity_id.split(".")[0]
-        card_type = {
-            "light": "light",
-            "switch": "light",
-            "climate": "thermostat",
-            "sensor": "sensor",
-            "cover": "cover",
-            "media_player": "media-control",
-            "binary_sensor": "sensor",
-        }.get(domain, "entity")
+        card_type = DOMAIN_CARD_TYPE.get(domain, "entity")
 
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
@@ -199,15 +203,7 @@ async def async_discover_devices_internal(
             continue
         seen_entities.add(entity_id)
         domain = entity_id.split(".")[0]
-        card_type = {
-            "light": "light",
-            "switch": "light",
-            "climate": "thermostat",
-            "sensor": "sensor",
-            "cover": "cover",
-            "media_player": "media-control",
-            "binary_sensor": "sensor",
-        }.get(domain, "entity")
+        card_type = DOMAIN_CARD_TYPE.get(domain, "entity")
 
         device_id = entity_devices.get(entity_id)
         area_id = device_areas.get(device_id)
