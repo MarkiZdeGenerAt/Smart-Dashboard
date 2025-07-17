@@ -111,12 +111,16 @@ sidebar:
 layout:
   strategy: masonry
 theme: auto
+overview_limit: 4
 load_lovelace_cards: true
 ```
 
 With auto discovery enabled the integration will query Home Assistant for all
 entities and group them by their assigned area, similar to Dwains Dashboard.
 Rooms can specify an `order` field to control their position in the dashboard.
+Use `overview_limit` to adjust how many device tiles each room shows on the
+overview page. Set it globally or per room to override the default of four
+tiles.
 All options are validated using `voluptuous` to catch mistakes early.
 You can embed any standard Lovelace card by listing its configuration under
 `cards`. For example `type: glance` or `type: light` entries are passed through

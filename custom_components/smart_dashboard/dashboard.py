@@ -15,6 +15,7 @@ import logging
 import sys
 import json
 from homeassistant.core import HomeAssistant
+from .const import DEFAULT_OVERVIEW_LIMIT
 from homeassistant.helpers import (
     area_registry as ar,
     device_registry as dr,
@@ -426,6 +427,7 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         config.get("rooms", []),
         key=lambda r: r.get("order", 0)
     )
+    global_limit = int(config.get("overview_limit", DEFAULT_OVERVIEW_LIMIT))
 
     overview_cards = []
     for room in rooms:
@@ -437,7 +439,8 @@ def build_dashboard(config: Dict[str, Any], lang: str) -> Dict[str, Any]:
         active_count = sum(
             1 for card in room.get("cards", []) if isinstance(card, dict) and card.get("entity")
         )
-        tile_cards = _apply_tile_templates(room.get("cards", []))[:4]
+        room_limit = int(room.get("overview_limit", global_limit))
+        tile_cards = _apply_tile_templates(room.get("cards", []))[:room_limit]
         stack = {
             "type": "vertical-stack",
             "cards": [

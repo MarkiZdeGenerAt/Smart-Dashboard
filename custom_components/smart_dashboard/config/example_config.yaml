@@ -14,6 +14,7 @@ sidebar:
 layout:
   strategy: masonry
 theme: auto
+overview_limit: 4
 button_card_templates:
   device_tile:
     show_icon: true
