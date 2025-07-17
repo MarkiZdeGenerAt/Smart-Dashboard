@@ -40,6 +40,7 @@ dashboard.
 Entities are grouped by area when possible; if no areas are available they are
 placed in a single "Auto Detected" room. Within each area the devices are
 organized into light, climate, multimedia and sensor sections to create a cleaner layout.
+If you notice duplicate cards after customizing rooms, mark the generated "Auto Detected" room with `hidden: true` or remove domains you do not need from the configuration.
 
 Set the `SHI_LANG` environment variable (for example `en`, `ru`, `bg`, or `es`) to
 generate the dashboard in a different language.
